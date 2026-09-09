@@ -1,0 +1,17 @@
+node_modules
+*no*commit*
+*No*Commit*
+*NO*COMMIT*
+*.bak
+*.bkp.*
+*.bkp
+*.log
+*.swp
+*.out
+*.zip
+*.del
+*.del.*
+_ide_helper*
+*.localonly.
+.vite
+dist*

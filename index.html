@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Endless Runner 3D - Three.js & Joystick</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- 3D WebGL Canvas -->
+  <div id="canvas-container">
+    <canvas id="game-canvas"></canvas>
+  </div>
+
+  <!-- UI Overlay -->
+  <div id="ui-container">
+    <!-- Top HUD Bar -->
+    <header class="hud-top">
+      <!-- Left: Health & Strength Gauges -->
+      <div class="hud-glass-card status-bars-container interactive">
+        <!-- Health Bar -->
+        <div class="bar-row">
+          <div class="bar-header text-emerald-400">
+            <span class="flex items-center gap-1">
+              <iconify-icon icon="mdi:heart" class="text-red-500"></iconify-icon> Vida
+            </span>
+            <span id="health-text">100%</span>
+          </div>
+          <div class="bar-track">
+            <div id="health-bar-fill" class="bar-fill bg-emerald-500" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Strength Bar -->
+        <div class="bar-row">
+          <div class="bar-header text-amber-400">
+            <span class="flex items-center gap-1">
+              <iconify-icon icon="mdi:lightning-bolt" class="text-amber-400"></iconify-icon> Força
+            </span>
+            <span id="strength-text">60%</span>
+          </div>
+          <div class="bar-track">
+            <div id="strength-bar-fill" class="bar-fill bg-orange-500" style="width: 60%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Score & Stats -->
+      <div class="hud-glass-card hud-center">
+        <div class="score-badge">
+          <div class="score-title">Pontuação</div>
+          <div id="hud-score" class="score-value">0</div>
+          <div class="stats-subline">
+            <span title="Frutas Coletadas">
+              <iconify-icon icon="mdi:fruit-cherries" class="text-rose-400"></iconify-icon>
+              <span id="hud-fruits">0</span>
+            </span>
+            <span title="Distância Percorrida">
+              <iconify-icon icon="mdi:flag-checkered" class="text-sky-400"></iconify-icon>
+              <span id="hud-distance">0m</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Action Buttons (Pause, Audio, Controls) -->
+      <div class="hud-actions interactive">
+        <!-- Pause Button -->
+        <button id="btn-pause" class="hud-btn" title="Pausar Jogo (Esc / Start)">
+          <iconify-icon id="pause-icon" icon="mdi:pause"></iconify-icon>
+        </button>
+
+        <!-- Mute Audio Button -->
+        <button id="btn-mute" class="hud-btn" title="Mutar / Desmutar Som Geral">
+          <iconify-icon id="icon-mute" icon="mdi:volume-high"></iconify-icon>
+        </button>
+
+        <!-- Toggle SFX Button -->
+        <button id="btn-sfx" class="hud-btn" title="Efeitos Sonoros (SFX)">
+          <iconify-icon id="icon-sfx" icon="mdi:bell-ring"></iconify-icon>
+        </button>
+
+        <!-- Toggle Music Button -->
+        <button id="btn-music" class="hud-btn" title="Música de Fundo">
+          <iconify-icon id="icon-music" icon="mdi:music"></iconify-icon>
+        </button>
+
+        <!-- Settings / Controls Button -->
+        <button id="btn-open-settings" class="hud-btn" title="Configurações de Teclas e Joystick">
+          <iconify-icon icon="mdi:controller"></iconify-icon>
+        </button>
+      </div>
+    </header>
+
+    <!-- Floating Score & Notification Popups -->
+    <div id="floating-notifications"></div>
+
+    <!-- On-screen Touch Controls (Mobile/Touch fallback) -->
+    <div class="touch-controls interactive">
+      <div class="touch-cluster-left">
+        <button id="touch-left" class="touch-btn" aria-label="Esquerda">
+          <iconify-icon icon="mdi:arrow-left-bold"></iconify-icon>
+        </button>
+        <button id="touch-right" class="touch-btn" aria-label="Direita">
+          <iconify-icon icon="mdi:arrow-right-bold"></iconify-icon>
+        </button>
+      </div>
+      <button id="touch-jump" class="touch-btn" aria-label="Pular">
+        <iconify-icon icon="mdi:arrow-up-bold"></iconify-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Pause -->
+  <div id="pause-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <iconify-icon icon="mdi:pause-circle" class="text-sky-400 text-2xl"></iconify-icon>
+          Jogo Pausado
+        </div>
+      </div>
+      <div class="modal-body text-center">
+        <p class="text-slate-300 mb-2">O jogo está pausado. Seus pontos continuam salvos.</p>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+          <button id="btn-resume" class="btn-primary" style="justify-content: center; padding: 0.8rem;">
+            <iconify-icon icon="mdi:play" class="text-xl"></iconify-icon> Continuar Correndo
+          </button>
+          <button id="btn-pause-settings" class="btn-secondary" style="justify-content: center; padding: 0.75rem;">
+            <iconify-icon icon="mdi:controller" class="text-xl"></iconify-icon> Configurar Controles
+          </button>
+          <button id="btn-reset-score" class="btn-secondary" style="justify-content: center; padding: 0.75rem; color: #f87171;">
+            <iconify-icon icon="mdi:restart" class="text-xl"></iconify-icon> Zerar Pontuação e Reiniciar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Controls Configuration (Teclado e Joystick) -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <iconify-icon icon="mdi:gamepad-variant" class="text-sky-400 text-2xl"></iconify-icon>
+          Configuração de Controles (Teclado e Joystick)
+        </div>
+        <button id="btn-close-settings" class="modal-close-btn" title="Fechar">
+          <iconify-icon icon="mdi:close"></iconify-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Controller Status Bar & Vibration Test -->
+        <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-700/60 flex flex-wrap items-center justify-between gap-3">
+          <div id="gamepad-status" class="flex items-center text-sm">
+            <iconify-icon icon="mdi:loading" class="animate-spin text-slate-400 mr-2"></iconify-icon>
+            <span class="text-slate-400">Verificando joysticks...</span>
+          </div>
+          <button id="btn-test-vibration" class="btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+            <iconify-icon icon="mdi:vibrate" class="text-amber-400 text-base"></iconify-icon>
+            Testar Vibração (DualShock / Xbox)
+          </button>
+        </div>
+
+        <!-- Preset Mode Selector -->
+        <div class="preset-section">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+            Modo de Nomenclatura do Joystick:
+          </div>
+          <div class="preset-selector">
+            <button id="preset-xbox" class="preset-btn active-preset">
+              <iconify-icon icon="mdi:microsoft-xbox" class="text-green-400 text-xl"></iconify-icon>
+              XInput (Xbox - A, B, X, Y)
+            </button>
+            <button id="preset-ps" class="preset-btn">
+              <iconify-icon icon="mdi:sony-playstation" class="text-blue-400 text-xl"></iconify-icon>
+              DualShock (PlayStation - ✕, ○, □, △)
+            </button>
+          </div>
+          <div class="text-xs text-slate-400 mt-2">
+            Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).
+          </div>
+        </div>
+
+        <!-- Bindings Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-slate-700 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <th class="py-2 px-4">Ação</th>
+                <th class="py-2 px-4 text-center">Entrada 1: Teclado</th>
+                <th class="py-2 px-4 text-center">Entrada 2: Joystick</th>
+              </tr>
+            </thead>
+            <tbody id="bindings-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-xs text-slate-400 bg-slate-800/40 p-3 rounded-lg border border-slate-700/40 flex items-start gap-2">
+          <iconify-icon icon="mdi:information" class="text-sky-400 text-lg flex-shrink-0 mt-0.5"></iconify-icon>
+          <span>
+            <strong>Como configurar:</strong> Clique no botão de uma ação para alterar sua tecla ou botão. Pressione a nova tecla no teclado ou direcional/botão no seu joystick. Analógicos e direcionais (D-Pad) são totalmente suportados!
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-reset-controls" class="btn-secondary" style="font-size: 0.85rem;">
+          <iconify-icon icon="mdi:restore"></iconify-icon> Restaurar Padrões
+        </button>
+        <button id="btn-save-settings" class="btn-primary" onclick="document.getElementById('settings-modal').classList.add('hidden');">
+          <iconify-icon icon="mdi:check"></iconify-icon> Salvar e Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Rebinding Overlay -->
+  <div id="rebinding-overlay" class="modal-overlay hidden" style="z-index: 60;">
+    <div class="rebinding-card">
+      <iconify-icon icon="mdi:radiobox-marked" class="pulse-icon"></iconify-icon>
+      <h3 class="text-xl font-bold text-white">Aguardando Entrada...</h3>
+      <p id="rebinding-action-text" class="text-slate-300 font-medium"></p>
+      <p class="text-xs text-slate-400">
+        Pressione o botão desejado no teclado ou joystick.<br>
+        (Pressione <strong>Esc</strong> para cancelar)
+      </p>
+      <button id="btn-cancel-rebind" class="btn-secondary" style="margin-top: 0.5rem;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
