@@ -5,24 +5,16 @@
  * 2. A Joystick button / axis
  */
 
+import { i18n } from '../i18n/I18nManager.js';
+
 export const ACTION_LEFT = 'MOVE_LEFT';
 export const ACTION_RIGHT = 'MOVE_RIGHT';
 export const ACTION_JUMP = 'JUMP';
 export const ACTION_PAUSE = 'PAUSE';
 
-export const ACTION_NAMES = {
-  [ACTION_LEFT]: 'Mover para Esquerda',
-  [ACTION_RIGHT]: 'Mover para Direita',
-  [ACTION_JUMP]: 'Pular Obstáculo',
-  [ACTION_PAUSE]: 'Pausar / Despausar'
-};
-
-export const ACTION_DESCRIPTIONS = {
-  [ACTION_LEFT]: 'Desvia para a faixa da esquerda',
-  [ACTION_RIGHT]: 'Desvia para a faixa da direita',
-  [ACTION_JUMP]: 'Salta por cima de troncos e barreiras',
-  [ACTION_PAUSE]: 'Abre o menu de pausa'
-};
+export function getActionName(action) {
+  return i18n.t(`action_${action}`);
+}
 
 const DEFAULT_BINDINGS = {
   [ACTION_LEFT]: {
@@ -98,18 +90,18 @@ export class KeyConfig {
    * Human-friendly label for keyboard key codes
    */
   getKeyboardLabel(code) {
-    if (!code) return 'Não atribuído';
-    if (code === 'Space') return 'Espaço';
-    if (code === 'ArrowUp') return 'Seta Cima';
-    if (code === 'ArrowDown') return 'Seta Baixo';
-    if (code === 'ArrowLeft') return 'Seta Esquerda';
-    if (code === 'ArrowRight') return 'Seta Direita';
+    if (!code) return i18n.t('key_unassigned');
+    if (code === 'Space') return i18n.t('key_space');
+    if (code === 'ArrowUp') return i18n.t('key_arrow_up');
+    if (code === 'ArrowDown') return i18n.t('key_arrow_down');
+    if (code === 'ArrowLeft') return i18n.t('key_arrow_left');
+    if (code === 'ArrowRight') return i18n.t('key_arrow_right');
     if (code === 'Escape') return 'Esc';
     if (code === 'Enter') return 'Enter';
     if (code === 'ShiftLeft' || code === 'ShiftRight') return 'Shift';
     if (code === 'ControlLeft' || code === 'ControlRight') return 'Ctrl';
-    if (code.startsWith('Key')) return 'Tecla ' + code.replace('Key', '');
-    if (code.startsWith('Digit')) return 'Número ' + code.replace('Digit', '');
+    if (code.startsWith('Key')) return `${i18n.t('key_prefix')} ${code.replace('Key', '')}`;
+    if (code.startsWith('Digit')) return `${i18n.t('digit_prefix')} ${code.replace('Digit', '')}`;
     return code;
   }
 }

@@ -22,7 +22,7 @@
         <div class="bar-row">
           <div class="bar-header text-emerald-400">
             <span class="flex items-center gap-1">
-              <iconify-icon icon="mdi:heart" class="text-red-500"></iconify-icon> Vida
+              <iconify-icon icon="mdi:heart" class="text-red-500"></iconify-icon> <span data-i18n="health">Vida</span>
             </span>
             <span id="health-text">100%</span>
           </div>
@@ -35,7 +35,7 @@
         <div class="bar-row">
           <div class="bar-header text-amber-400">
             <span class="flex items-center gap-1">
-              <iconify-icon icon="mdi:lightning-bolt" class="text-amber-400"></iconify-icon> Força
+              <iconify-icon icon="mdi:lightning-bolt" class="text-amber-400"></iconify-icon> <span data-i18n="strength">Força</span>
             </span>
             <span id="strength-text">60%</span>
           </div>
@@ -48,14 +48,14 @@
       <!-- Center: Score & Stats -->
       <div class="hud-glass-card hud-center">
         <div class="score-badge">
-          <div class="score-title">Pontuação</div>
+          <div class="score-title" data-i18n="score">Pontuação</div>
           <div id="hud-score" class="score-value">0</div>
           <div class="stats-subline">
-            <span title="Frutas Coletadas">
+            <span data-i18n-title="fruits" title="Frutas">
               <iconify-icon icon="mdi:fruit-cherries" class="text-rose-400"></iconify-icon>
               <span id="hud-fruits">0</span>
             </span>
-            <span title="Distância Percorrida">
+            <span data-i18n-title="distance" title="Distância">
               <iconify-icon icon="mdi:flag-checkered" class="text-sky-400"></iconify-icon>
               <span id="hud-distance">0m</span>
             </span>
@@ -63,30 +63,35 @@
         </div>
       </div>
 
-      <!-- Right: Action Buttons (Pause, Audio, Controls) -->
+      <!-- Right: Action Buttons (Pause, Audio, Lang, Controls) -->
       <div class="hud-actions interactive">
         <!-- Pause Button -->
-        <button id="btn-pause" class="hud-btn" title="Pausar Jogo (Esc / Start)">
+        <button id="btn-pause" class="hud-btn" data-i18n-title="btn_pause_title" title="Pausar Jogo (Esc / Start)">
           <iconify-icon id="pause-icon" icon="mdi:pause"></iconify-icon>
         </button>
 
         <!-- Mute Audio Button -->
-        <button id="btn-mute" class="hud-btn" title="Mutar / Desmutar Som Geral">
+        <button id="btn-mute" class="hud-btn" data-i18n-title="btn_mute_title" title="Mutar / Desmutar Som Geral">
           <iconify-icon id="icon-mute" icon="mdi:volume-high"></iconify-icon>
         </button>
 
         <!-- Toggle SFX Button -->
-        <button id="btn-sfx" class="hud-btn" title="Efeitos Sonoros (SFX)">
+        <button id="btn-sfx" class="hud-btn" data-i18n-title="btn_sfx_title" title="Efeitos Sonoros (SFX)">
           <iconify-icon id="icon-sfx" icon="mdi:bell-ring"></iconify-icon>
         </button>
 
         <!-- Toggle Music Button -->
-        <button id="btn-music" class="hud-btn" title="Música de Fundo">
+        <button id="btn-music" class="hud-btn" data-i18n-title="btn_music_title" title="Música de Fundo">
           <iconify-icon id="icon-music" icon="mdi:music"></iconify-icon>
         </button>
 
+        <!-- Language Toggle Button -->
+        <button id="btn-lang" class="hud-btn" data-i18n-title="btn_lang_title" title="Alternar Idioma (Português / English)">
+          <span id="lang-text" style="font-size: 0.85rem; font-weight: 800; color: #38bdf8;">PT</span>
+        </button>
+
         <!-- Settings / Controls Button -->
-        <button id="btn-open-settings" class="hud-btn" title="Configurações de Teclas e Joystick">
+        <button id="btn-open-settings" class="hud-btn" data-i18n-title="btn_settings_title" title="Configurações de Teclas e Joystick">
           <iconify-icon icon="mdi:controller"></iconify-icon>
         </button>
       </div>
@@ -117,20 +122,20 @@
       <div class="modal-header">
         <div class="modal-title">
           <iconify-icon icon="mdi:pause-circle" class="text-sky-400 text-2xl"></iconify-icon>
-          Jogo Pausado
+          <span data-i18n="pause_title">Jogo Pausado</span>
         </div>
       </div>
       <div class="modal-body text-center">
-        <p class="text-slate-300 mb-2">O jogo está pausado. Seus pontos continuam salvos.</p>
+        <p class="text-slate-300 mb-2" data-i18n="pause_desc">O jogo está pausado. Seus pontos continuam salvos.</p>
         <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
           <button id="btn-resume" class="btn-primary" style="justify-content: center; padding: 0.8rem;">
-            <iconify-icon icon="mdi:play" class="text-xl"></iconify-icon> Continuar Correndo
+            <iconify-icon icon="mdi:play" class="text-xl"></iconify-icon> <span data-i18n="btn_resume">Continuar Correndo</span>
           </button>
           <button id="btn-pause-settings" class="btn-secondary" style="justify-content: center; padding: 0.75rem;">
-            <iconify-icon icon="mdi:controller" class="text-xl"></iconify-icon> Configurar Controles
+            <iconify-icon icon="mdi:controller" class="text-xl"></iconify-icon> <span data-i18n="btn_config_controls">Configurar Controles</span>
           </button>
           <button id="btn-reset-score" class="btn-secondary" style="justify-content: center; padding: 0.75rem; color: #f87171;">
-            <iconify-icon icon="mdi:restart" class="text-xl"></iconify-icon> Zerar Pontuação e Reiniciar
+            <iconify-icon icon="mdi:restart" class="text-xl"></iconify-icon> <span data-i18n="btn_reset_score">Zerar Pontuação e Reiniciar</span>
           </button>
         </div>
       </div>
@@ -143,7 +148,7 @@
       <div class="modal-header">
         <div class="modal-title">
           <iconify-icon icon="mdi:gamepad-variant" class="text-sky-400 text-2xl"></iconify-icon>
-          Configuração de Controles (Teclado e Joystick)
+          <span data-i18n="settings_title">Configuração de Controles (Teclado e Joystick)</span>
         </div>
         <button id="btn-close-settings" class="modal-close-btn" title="Fechar">
           <iconify-icon icon="mdi:close"></iconify-icon>
@@ -155,17 +160,17 @@
         <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-700/60 flex flex-wrap items-center justify-between gap-3">
           <div id="gamepad-status" class="flex items-center text-sm">
             <iconify-icon icon="mdi:loading" class="animate-spin text-slate-400 mr-2"></iconify-icon>
-            <span class="text-slate-400">Verificando joysticks...</span>
+            <span class="text-slate-400" data-i18n="gamepad_checking">Verificando joysticks...</span>
           </div>
           <button id="btn-test-vibration" class="btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
             <iconify-icon icon="mdi:vibrate" class="text-amber-400 text-base"></iconify-icon>
-            Testar Vibração (DualShock / Xbox)
+            <span data-i18n="btn_test_vibration">Testar Vibração (DualShock / Xbox)</span>
           </button>
         </div>
 
         <!-- Preset Mode Selector -->
         <div class="preset-section">
-          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1" data-i18n="naming_mode">
             Modo de Nomenclatura do Joystick:
           </div>
           <div class="preset-selector">
@@ -178,7 +183,7 @@
               DualShock (PlayStation - ✕, ○, □, △)
             </button>
           </div>
-          <div class="text-xs text-slate-400 mt-2">
+          <div class="text-xs text-slate-400 mt-2" data-i18n="naming_desc">
             Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).
           </div>
         </div>
@@ -188,9 +193,9 @@
           <table class="w-full text-left text-sm border-collapse">
             <thead>
               <tr class="border-b border-slate-700 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                <th class="py-2 px-4">Ação</th>
-                <th class="py-2 px-4 text-center">Entrada 1: Teclado</th>
-                <th class="py-2 px-4 text-center">Entrada 2: Joystick</th>
+                <th class="py-2 px-4" data-i18n="table_action">Ação</th>
+                <th class="py-2 px-4 text-center" data-i18n="table_keyboard">Entrada 1: Teclado</th>
+                <th class="py-2 px-4 text-center" data-i18n="table_joystick">Entrada 2: Joystick</th>
               </tr>
             </thead>
             <tbody id="bindings-table-body">
@@ -201,18 +206,18 @@
 
         <div class="text-xs text-slate-400 bg-slate-800/40 p-3 rounded-lg border border-slate-700/40 flex items-start gap-2">
           <iconify-icon icon="mdi:information" class="text-sky-400 text-lg flex-shrink-0 mt-0.5"></iconify-icon>
-          <span>
-            <strong>Como configurar:</strong> Clique no botão de uma ação para alterar sua tecla ou botão. Pressione a nova tecla no teclado ou direcional/botão no seu joystick. Analógicos e direcionais (D-Pad) são totalmente suportados!
+          <span data-i18n="how_to_configure">
+            Como configurar: Clique no botão de uma ação para alterar sua tecla ou botão. Pressione a nova tecla no teclado ou direcional/botão no joystick. Analógicos e direcionais (D-Pad) são totalmente suportados!
           </span>
         </div>
       </div>
 
       <div class="modal-footer">
         <button id="btn-reset-controls" class="btn-secondary" style="font-size: 0.85rem;">
-          <iconify-icon icon="mdi:restore"></iconify-icon> Restaurar Padrões
+          <iconify-icon icon="mdi:restore"></iconify-icon> <span data-i18n="btn_reset_defaults">Restaurar Padrões</span>
         </button>
         <button id="btn-save-settings" class="btn-primary" onclick="document.getElementById('settings-modal').classList.add('hidden');">
-          <iconify-icon icon="mdi:check"></iconify-icon> Salvar e Fechar
+          <iconify-icon icon="mdi:check"></iconify-icon> <span data-i18n="btn_save_close">Salvar e Fechar</span>
         </button>
       </div>
     </div>
@@ -222,14 +227,14 @@
   <div id="rebinding-overlay" class="modal-overlay hidden" style="z-index: 60;">
     <div class="rebinding-card">
       <iconify-icon icon="mdi:radiobox-marked" class="pulse-icon"></iconify-icon>
-      <h3 class="text-xl font-bold text-white">Aguardando Entrada...</h3>
+      <h3 class="text-xl font-bold text-white" data-i18n="rebinding_title">Aguardando Entrada...</h3>
       <p id="rebinding-action-text" class="text-slate-300 font-medium"></p>
-      <p class="text-xs text-slate-400">
+      <p class="text-xs text-slate-400" data-i18n="rebinding_hint">
         Pressione o botão desejado no teclado ou joystick.<br>
         (Pressione <strong>Esc</strong> para cancelar)
       </p>
       <button id="btn-cancel-rebind" class="btn-secondary" style="margin-top: 0.5rem;">
-        Cancelar
+        <span data-i18n="btn_cancel">Cancelar</span>
       </button>
     </div>
   </div>

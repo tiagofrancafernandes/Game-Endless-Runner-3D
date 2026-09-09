@@ -3,6 +3,8 @@
  * analog axis deadzones, and dual-rumble vibration support.
  */
 
+import { i18n } from '../i18n/I18nManager.js';
+
 export const PRESET_XINPUT = 'xinput';
 export const PRESET_DUALSHOCK = 'dualshock';
 
@@ -52,10 +54,10 @@ export class GamepadAdapter {
 
   /**
    * Translates a joystick identifier code (e.g. 'btn_0', 'axis_0_neg') into a human-friendly name
-   * based on the active controller preset (XInput vs DualShock).
+   * based on the active controller preset (XInput vs DualShock) and current language.
    */
   getLabel(code) {
-    if (!code) return 'Não atribuído';
+    if (!code) return i18n.t('key_unassigned');
 
     const isXbox = this.preset === PRESET_XINPUT;
 
@@ -63,36 +65,36 @@ export class GamepadAdapter {
     if (code.startsWith('btn_')) {
       const idx = parseInt(code.replace('btn_', ''), 10);
       switch (idx) {
-        case 0: return isXbox ? 'Botão A' : 'Botão ✕ (Cruz)';
-        case 1: return isXbox ? 'Botão B' : 'Botão ○ (Círculo)';
-        case 2: return isXbox ? 'Botão X' : 'Botão □ (Quadrado)';
-        case 3: return isXbox ? 'Botão Y' : 'Botão △ (Triângulo)';
-        case 4: return isXbox ? 'LB (Ombro Esq)' : 'L1 (Ombro Esq)';
-        case 5: return isXbox ? 'RB (Ombro Dir)' : 'R1 (Ombro Dir)';
-        case 6: return isXbox ? 'LT (Gatilho Esq)' : 'L2 (Gatilho Esq)';
-        case 7: return isXbox ? 'RT (Gatilho Dir)' : 'R2 (Gatilho Dir)';
-        case 8: return isXbox ? 'Back / View' : 'Select / Share';
-        case 9: return isXbox ? 'Start / Menu' : 'Start / Options';
-        case 10: return isXbox ? 'Clique Stick Esq (LS)' : 'Clique Stick Esq (L3)';
-        case 11: return isXbox ? 'Clique Stick Dir (RS)' : 'Clique Stick Dir (R3)';
-        case 12: return 'D-Pad Cima (Direcional)';
-        case 13: return 'D-Pad Baixo (Direcional)';
-        case 14: return 'D-Pad Esquerda (Direcional)';
-        case 15: return 'D-Pad Direita (Direcional)';
-        case 16: return isXbox ? 'Botão Xbox' : 'Botão PS';
-        default: return `Botão ${idx}`;
+        case 0: return isXbox ? i18n.t('btn_xbox_a') : i18n.t('btn_ps_cross');
+        case 1: return isXbox ? i18n.t('btn_xbox_b') : i18n.t('btn_ps_circle');
+        case 2: return isXbox ? i18n.t('btn_xbox_x') : i18n.t('btn_ps_square');
+        case 3: return isXbox ? i18n.t('btn_xbox_y') : i18n.t('btn_ps_triangle');
+        case 4: return isXbox ? i18n.t('btn_xbox_lb') : i18n.t('btn_ps_l1');
+        case 5: return isXbox ? i18n.t('btn_xbox_rb') : i18n.t('btn_ps_r1');
+        case 6: return isXbox ? i18n.t('btn_xbox_lt') : i18n.t('btn_ps_l2');
+        case 7: return isXbox ? i18n.t('btn_xbox_rt') : i18n.t('btn_ps_r2');
+        case 8: return isXbox ? i18n.t('btn_xbox_view') : i18n.t('btn_ps_share');
+        case 9: return isXbox ? i18n.t('btn_xbox_menu') : i18n.t('btn_ps_options');
+        case 10: return isXbox ? i18n.t('btn_xbox_ls') : i18n.t('btn_ps_l3');
+        case 11: return isXbox ? i18n.t('btn_xbox_rs') : i18n.t('btn_ps_r3');
+        case 12: return i18n.t('dpad_up');
+        case 13: return i18n.t('dpad_down');
+        case 14: return i18n.t('dpad_left');
+        case 15: return i18n.t('dpad_right');
+        case 16: return isXbox ? i18n.t('btn_xbox_guide') : i18n.t('btn_ps_guide');
+        default: return i18n.t('btn_generic', { idx });
       }
     }
 
     // Axes
-    if (code === 'axis_0_neg') return 'Analógico Esq (Esquerda)';
-    if (code === 'axis_0_pos') return 'Analógico Esq (Direita)';
-    if (code === 'axis_1_neg') return 'Analógico Esq (Cima)';
-    if (code === 'axis_1_pos') return 'Analógico Esq (Baixo)';
-    if (code === 'axis_2_neg') return 'Analógico Dir (Esquerda)';
-    if (code === 'axis_2_pos') return 'Analógico Dir (Direita)';
-    if (code === 'axis_3_neg') return 'Analógico Dir (Cima)';
-    if (code === 'axis_3_pos') return 'Analógico Dir (Baixo)';
+    if (code === 'axis_0_neg') return i18n.t('axis_ls_left');
+    if (code === 'axis_0_pos') return i18n.t('axis_ls_right');
+    if (code === 'axis_1_neg') return i18n.t('axis_ls_up');
+    if (code === 'axis_1_pos') return i18n.t('axis_ls_down');
+    if (code === 'axis_2_neg') return i18n.t('axis_rs_left');
+    if (code === 'axis_2_pos') return i18n.t('axis_rs_right');
+    if (code === 'axis_3_neg') return i18n.t('axis_rs_up');
+    if (code === 'axis_3_pos') return i18n.t('axis_rs_down');
 
     return code;
   }

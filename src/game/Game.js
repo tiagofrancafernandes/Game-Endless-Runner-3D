@@ -7,6 +7,7 @@ import { inputManager } from '../input/InputManager.js';
 import { audioManager } from '../audio/AudioManager.js';
 import { gamepadAdapter } from '../input/GamepadAdapter.js';
 import { ACTION_LEFT, ACTION_RIGHT, ACTION_JUMP, ACTION_PAUSE } from '../input/KeyConfig.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class Game {
   constructor(canvas, uiManager) {
@@ -169,14 +170,14 @@ export class Game {
 
     // Floating text notification in UI
     if (this.uiManager) {
-      this.uiManager.showFloatingNotice(`-${scoreLoss} PONTOS!`, '#ef4444');
+      this.uiManager.showFloatingNotice(i18n.t('points_lost', { count: scoreLoss }), '#ef4444');
     }
 
     // "o jogo não tem fim" - if life hits 0, recover baseline health with warning so game continues infinitely!
     if (this.life <= 0) {
       this.life = 25;
       if (this.uiManager) {
-        this.uiManager.showFloatingNotice('RECUPEROU O FÔLEGO!', '#f59e0b');
+        this.uiManager.showFloatingNotice(i18n.t('second_wind'), '#f59e0b');
       }
     }
   }
@@ -195,8 +196,9 @@ export class Game {
     this.life = Math.min(100, this.life + fruit.health);
     this.strength = Math.min(100, this.strength + fruit.strength);
 
+    const fruitName = i18n.t(fruit.nameKey || 'fruit_apple');
     if (this.uiManager) {
-      this.uiManager.showFloatingNotice(`+${fruit.points} [${fruit.name}]`, '#10b981');
+      this.uiManager.showFloatingNotice(`+${fruit.points} [${fruitName}]`, '#10b981');
     }
   }
 

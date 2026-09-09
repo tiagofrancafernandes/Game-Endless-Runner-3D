@@ -46,7 +46,7 @@ export class FruitManager {
     group.add(body, stem, leaf);
     group.userData = {
       type: 'apple',
-      name: 'Maçã',
+      nameKey: 'fruit_apple',
       points: 60,
       health: 12,
       strength: 15,
@@ -73,7 +73,7 @@ export class FruitManager {
     group.add(banana, tip);
     group.userData = {
       type: 'banana',
-      name: 'Banana',
+      nameKey: 'fruit_banana',
       points: 80,
       health: 15,
       strength: 20,
@@ -109,7 +109,7 @@ export class FruitManager {
     group.add(cherry1, cherry2, stem1, stem2);
     group.userData = {
       type: 'cherry',
-      name: 'Cereja',
+      nameKey: 'fruit_cherry',
       points: 120,
       health: 20,
       strength: 25,
@@ -135,7 +135,7 @@ export class FruitManager {
     group.add(orange, leaf);
     group.userData = {
       type: 'orange',
-      name: 'Laranja',
+      nameKey: 'fruit_orange',
       points: 90,
       health: 16,
       strength: 18,

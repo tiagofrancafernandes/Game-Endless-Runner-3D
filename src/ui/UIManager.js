@@ -1,7 +1,8 @@
 import { audioManager } from '../audio/AudioManager.js';
 import { gamepadAdapter, PRESET_XINPUT, PRESET_DUALSHOCK } from '../input/GamepadAdapter.js';
-import { keyConfig, ACTION_LEFT, ACTION_RIGHT, ACTION_JUMP, ACTION_PAUSE, ACTION_NAMES } from '../input/KeyConfig.js';
+import { keyConfig, ACTION_LEFT, ACTION_RIGHT, ACTION_JUMP, ACTION_PAUSE, getActionName } from '../input/KeyConfig.js';
 import { inputManager } from '../input/InputManager.js';
+import { i18n } from '../i18n/I18nManager.js';
 
 export class UIManager {
   constructor() {
@@ -27,8 +28,16 @@ export class UIManager {
 
     this.initEventListeners();
     this.updateAudioIcons();
+    this.updateLangButton();
+    i18n.applyDomTranslations();
     this.renderKeybindingRows();
     this.checkGamepadConnection();
+
+    i18n.subscribe(() => {
+      this.updateLangButton();
+      this.renderKeybindingRows();
+      this.checkGamepadConnection();
+    });
   }
 
   setGame(game) {
@@ -72,6 +81,15 @@ export class UIManager {
     if (btnOpenSettings) {
       btnOpenSettings.addEventListener('click', () => {
         this.openSettings();
+      });
+    }
+
+    // Language Toggle button
+    const btnLang = document.getElementById('btn-lang');
+    if (btnLang) {
+      btnLang.addEventListener('click', () => {
+        i18n.toggleLocale();
+        audioManager.playClick();
       });
     }
 
@@ -152,9 +170,9 @@ export class UIManager {
       btnTestVibration.addEventListener('click', () => {
         const success = gamepadAdapter.vibrate(400, 1.0, 0.8);
         if (success) {
-          this.showFloatingNotice('Vibração executada!', '#3b82f6');
+          this.showFloatingNotice(i18n.t('vibration_ok'), '#3b82f6');
         } else {
-          this.showFloatingNotice('Vibração não suportada ou controle desconectado', '#f59e0b');
+          this.showFloatingNotice(i18n.t('vibration_fail'), '#f59e0b');
         }
       });
     }
@@ -284,14 +302,14 @@ export class UIManager {
       if (gamepad) {
         elStatus.innerHTML = `
           <iconify-icon icon="mdi:check-circle" class="text-emerald-400 text-lg mr-1"></iconify-icon>
-          <span class="text-emerald-300 font-medium">Conectado:</span>
+          <span class="text-emerald-300 font-medium">${i18n.t('gamepad_connected')}</span>
           <span class="text-slate-200 truncate max-w-xs ml-1" title="${gamepad.id}">${gamepad.id}</span>
         `;
         if (btnTestVib) btnTestVib.disabled = false;
       } else {
         elStatus.innerHTML = `
           <iconify-icon icon="mdi:alert-circle-outline" class="text-amber-400 text-lg mr-1"></iconify-icon>
-          <span class="text-slate-400">Nenhum controle detectado. Conecte e pressione qualquer botão.</span>
+          <span class="text-slate-400">${i18n.t('gamepad_none')}</span>
         `;
         if (btnTestVib) btnTestVib.disabled = false; // still allow clicking to test
       }
@@ -307,7 +325,7 @@ export class UIManager {
 
     actions.forEach((action) => {
       const binding = keyConfig.getBinding(action);
-      const actionName = ACTION_NAMES[action];
+      const actionName = getActionName(action);
 
       const tr = document.createElement('tr');
       tr.className = 'border-b border-slate-700/60 hover:bg-slate-800/40 transition';
@@ -354,8 +372,8 @@ export class UIManager {
 
     this.rebindingOverlay.classList.remove('hidden');
     if (this.rebindingActionText) {
-      const typeLabel = type === 'keyboard' ? 'no Teclado' : 'no Controle / Joystick';
-      this.rebindingActionText.textContent = `Pressione a nova tecla/botão para "${actionName}" (${typeLabel})`;
+      const typeLabel = type === 'keyboard' ? i18n.t('on_keyboard') : i18n.t('on_joystick');
+      this.rebindingActionText.textContent = i18n.t('rebinding_prompt', { action: actionName, type: typeLabel });
     }
 
     inputManager.startListening(action, type, (newCode) => {
@@ -363,9 +381,17 @@ export class UIManager {
       if (newCode) {
         audioManager.playJump();
         this.renderKeybindingRows();
-        this.showFloatingNotice('Tecla configurada com sucesso!', '#10b981');
+        this.showFloatingNotice(i18n.t('key_configured'), '#10b981');
       }
     });
+  }
+
+  updateLangButton() {
+    const btnLangText = document.getElementById('lang-text');
+    const isPt = i18n.getLocale() === 'pt-BR';
+    if (btnLangText) {
+      btnLangText.textContent = isPt ? 'PT' : 'EN';
+    }
   }
 
   updateAudioIcons() {
