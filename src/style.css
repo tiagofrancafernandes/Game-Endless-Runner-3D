@@ -302,8 +302,7 @@ body, html {
   width: 4.2rem;
   height: 4.2rem;
   border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.65);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #38bdf8;
   backdrop-filter: blur(8px);
   color: white;
   display: flex;
@@ -312,6 +311,11 @@ body, html {
   font-size: 1.8rem;
   cursor: pointer;
   touch-action: manipulation;
+  background: radial-gradient(circle, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(56, 189, 248, 0.15);
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  border-color: #38bdf8;
 }
 
 .touch-btn:active {

@@ -624,7 +624,7 @@ export class UIManager {
     }
 
     if (touchModeIcon) {
-      touchModeIcon.setAttribute('icon', isAnalog ? 'mdi:controller' : 'mdi:axis-arrow');
+      touchModeIcon.setAttribute('icon', isAnalog ? 'mdi:axis-arrow' : 'material-symbols:joystick');
     }
 
     if (touchOptDpad && touchOptAnalog) {
