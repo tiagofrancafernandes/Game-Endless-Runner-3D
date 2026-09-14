@@ -21,6 +21,8 @@ export class Player {
     this.isGliding = false;
     this.airTime = 0;
     this.glideTime = 0;
+    this.gliderHoldThreshold = 0.18; // Minimum hold time (~180ms) to deploy glider
+    this.jumpOriginGround = false;   // Tracks if current jump originated from the ground
 
     // Invulnerability & Hit state
     this.isInvulnerable = false;
@@ -312,6 +314,7 @@ export class Player {
       this.isGliding = false;
       this.airTime = 0;
       this.glideTime = 0;
+      this.jumpOriginGround = true; // Started from the ground
       if (this.gliderGroup) this.gliderGroup.visible = false;
       return true;
     }
@@ -329,6 +332,7 @@ export class Player {
 
     // Cancel gliding immediately on impact
     this.isGliding = false;
+    this.jumpOriginGround = false;
     if (this.gliderGroup) this.gliderGroup.visible = false;
 
     // "volta para o meio onde continua a correr" (user requirement)
@@ -349,17 +353,23 @@ export class Player {
       this.airTime += delta;
 
       // Deploy glider if jump action is held while airborne
-      if (isJumpHeld && this.airTime > 0.18) {
+      if (isJumpHeld && this.airTime >= this.gliderHoldThreshold) {
         if (!this.isGliding) {
           this.isGliding = true;
           if (this.gliderGroup) this.gliderGroup.visible = true;
           audioManager.playGliderOpen();
 
-          // Upward lift upon opening glider (even when opened during fall)
-          if (this.y < 3.8) {
-            this.vy = 3.2; // Gentle thermal lift pop
+          // If coming from the ground, the glider jump reaches noticeably higher
+          if (this.jumpOriginGround) {
+            this.jumpOriginGround = false;
+            this.vy = 5.6; // High soaring launch boost from ground
           } else {
-            this.vy = Math.max(this.vy, 0.5);
+            // Mid-air / fall deploy: gentle thermal lift pop
+            if (this.y < 4.2) {
+              this.vy = 3.2;
+            } else {
+              this.vy = Math.max(this.vy, 0.5);
+            }
           }
 
           if (particleSystem) {
@@ -398,6 +408,7 @@ export class Player {
         this.isGrounded = true;
         this.airTime = 0;
         this.glideTime = 0;
+        this.jumpOriginGround = false;
 
         // "sumindo as asas do planador assim que toca o chão"
         if (this.isGliding) {
@@ -492,6 +503,7 @@ export class Player {
     this.isGliding = false;
     this.airTime = 0;
     this.glideTime = 0;
+    this.jumpOriginGround = false;
     if (this.gliderGroup) this.gliderGroup.visible = false;
     this.isInvulnerable = false;
     this.invulnerableTimer = 0;
