@@ -155,6 +155,11 @@ export class Game {
   handleInput() {
     inputManager.update();
 
+    // If Settings modal is currently open, do not process pause toggle or gameplay movement
+    if (this.uiManager && this.uiManager.isSettingsOpen && this.uiManager.isSettingsOpen()) {
+      return;
+    }
+
     // Pause toggle
     if (inputManager.isJustPressed(ACTION_PAUSE)) {
       this.togglePause();

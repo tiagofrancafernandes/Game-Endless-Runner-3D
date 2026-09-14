@@ -186,8 +186,27 @@ export class UIManager {
       });
     }
 
-    // Keyboard shortcut for Fullscreen ('F')
+    // Keyboard shortcuts ('F' for Fullscreen, 'Escape' to close Settings Modal)
     window.addEventListener('keydown', (e) => {
+      // Escape key: close settings modal if open, preventing unpausing
+      if (e.key === 'Escape' || e.code === 'Escape') {
+        if (inputManager && inputManager.isListening) {
+          // Rebinding is listening, let InputManager cancel rebinding
+          return;
+        }
+        if (this.isSettingsOpen()) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          this.closeSettings();
+          if (inputManager) {
+            inputManager.keysDown.delete('Escape');
+            inputManager.keysJustPressed.delete('Escape');
+          }
+          return;
+        }
+      }
+
       if (inputManager && inputManager.isListening) return;
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
 
@@ -196,7 +215,16 @@ export class UIManager {
         this.toggleFullscreen();
         audioManager.playClick();
       }
-    });
+    }, true);
+
+    // Light dismiss: Close settings modal when clicking on the backdrop overlay
+    if (this.settingsModal) {
+      this.settingsModal.addEventListener('click', (e) => {
+        if (e.target === this.settingsModal) {
+          this.closeSettings();
+        }
+      });
+    }
 
     // Pause modal buttons
     const btnResume = document.getElementById('btn-resume');
@@ -393,6 +421,10 @@ export class UIManager {
     if (pauseIcon) {
       pauseIcon.setAttribute('icon', paused ? 'mdi:play' : 'mdi:pause');
     }
+  }
+
+  isSettingsOpen() {
+    return !!(this.settingsModal && !this.settingsModal.classList.contains('hidden'));
   }
 
   openSettings() {

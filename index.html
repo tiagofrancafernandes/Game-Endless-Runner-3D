@@ -167,13 +167,13 @@
     </div>
   </div>
 
-  <!-- Modal: Controls Configuration (Teclado e Joystick) -->
+  <!-- Modal: Settings -->
   <div id="settings-modal" class="modal-overlay hidden">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title">
-          <iconify-icon icon="mdi:gamepad-variant" class="text-sky-400 text-2xl"></iconify-icon>
-          <span data-i18n="settings_title">Configuração de Controles (Teclado e Joystick)</span>
+          <iconify-icon icon="mdi:cog" class="text-sky-400 text-2xl"></iconify-icon>
+          <span data-i18n="settings_title">Configurações</span>
         </div>
         <button id="btn-close-settings" class="modal-close-btn" title="Fechar">
           <iconify-icon icon="mdi:close"></iconify-icon>
@@ -181,42 +181,50 @@
       </div>
 
       <div class="modal-body">
-        <!-- Controller Status Bar & Vibration Test -->
-        <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-700/60 flex flex-wrap items-center justify-between gap-3">
-          <div id="gamepad-status" class="flex items-center text-sm">
+        <!-- Card 1: Gamepad Status & Vibration -->
+        <div class="config-card">
+          <div class="config-card-header">
+            <div class="config-card-title">
+              <iconify-icon icon="mdi:gamepad-variant" class="text-sky-400"></iconify-icon>
+              <span data-i18n="gamepad_section_title">Status do Joystick e Vibração:</span>
+            </div>
+            <button id="btn-test-vibration" class="btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;">
+              <iconify-icon icon="mdi:vibrate" class="text-amber-400 text-base"></iconify-icon>
+              <span data-i18n="btn_test_vibration">Testar Vibração (DualShock / Xbox)</span>
+            </button>
+          </div>
+          <div id="gamepad-status" class="flex items-center text-sm p-2.5 bg-slate-900/60 rounded-lg border border-slate-800">
             <iconify-icon icon="mdi:loading" class="animate-spin text-slate-400 mr-2"></iconify-icon>
             <span class="text-slate-400" data-i18n="gamepad_checking">Verificando joysticks...</span>
           </div>
-          <button id="btn-test-vibration" class="btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
-            <iconify-icon icon="mdi:vibrate" class="text-amber-400 text-base"></iconify-icon>
-            <span data-i18n="btn_test_vibration">Testar Vibração (DualShock / Xbox)</span>
-          </button>
         </div>
 
-        <!-- Preset Mode Selector -->
-        <div class="preset-section">
-          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1" data-i18n="naming_mode">
-            Modo de Nomenclatura do Joystick:
+        <!-- Card 2: Gamepad Naming Mode -->
+        <div class="config-card">
+          <div class="config-card-title">
+            <iconify-icon icon="mdi:controller" class="text-sky-400"></iconify-icon>
+            <span data-i18n="naming_mode">Modo de Nomenclatura do Joystick:</span>
           </div>
           <div class="preset-selector">
             <button id="preset-xbox" class="preset-btn active-preset">
               <iconify-icon icon="mdi:microsoft-xbox" class="text-green-400 text-xl"></iconify-icon>
-              XInput (Xbox - A, B, X, Y)
+              <span>XInput (Xbox - A, B, X, Y)</span>
             </button>
             <button id="preset-ps" class="preset-btn">
               <iconify-icon icon="mdi:sony-playstation" class="text-blue-400 text-xl"></iconify-icon>
-              DualShock (PlayStation - ✕, ○, □, △)
+              <span>DualShock (PlayStation - ✕, ○, □, △)</span>
             </button>
           </div>
-          <div class="text-xs text-slate-400 mt-2" data-i18n="naming_desc">
+          <div class="config-card-desc" data-i18n="naming_desc">
             Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).
           </div>
         </div>
 
-        <!-- Touch Control Mode Selector (Mobile/Tablet) -->
-        <div class="preset-section">
-          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1" data-i18n="touch_control_title">
-            Controles na Tela (Toque / Mobile):
+        <!-- Card 3: Touch Controls Mode -->
+        <div class="config-card">
+          <div class="config-card-title">
+            <iconify-icon icon="mdi:gesture-tap-button" class="text-sky-400"></iconify-icon>
+            <span data-i18n="touch_control_title">Controles na Tela (Toque / Mobile):</span>
           </div>
           <div class="preset-selector">
             <button id="touch-opt-dpad" class="preset-btn active-preset">
@@ -228,15 +236,16 @@
               <span data-i18n="touch_mode_analog_label">Controle Analógico</span>
             </button>
           </div>
-          <div class="text-xs text-slate-400 mt-2" data-i18n="touch_control_desc">
+          <div class="config-card-desc" data-i18n="touch_control_desc">
             Escolha entre usar botões com setas direcionais ou o controle analógico virtual.
           </div>
         </div>
 
-        <!-- Auto-Pause on Focus Loss Section -->
-        <div class="preset-section">
-          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1" data-i18n="auto_pause_title">
-            Pausar ao Perder Foco (Aba / Janela):
+        <!-- Card 4: Auto-Pause on Focus Loss -->
+        <div class="config-card">
+          <div class="config-card-title">
+            <iconify-icon icon="mdi:pause-circle" class="text-sky-400"></iconify-icon>
+            <span data-i18n="auto_pause_title">Pausar ao Perder Foco (Aba / Janela):</span>
           </div>
           <div class="preset-selector">
             <button id="opt-auto-pause-on" class="preset-btn active-preset">
@@ -248,32 +257,38 @@
               <span data-i18n="auto_pause_disabled">Desativado (Manter rodando)</span>
             </button>
           </div>
-          <div class="text-xs text-slate-400 mt-2" data-i18n="auto_pause_desc">
+          <div class="config-card-desc" data-i18n="auto_pause_desc">
             Pausa o jogo automaticamente caso você mude de aba, minimize o navegador ou alterne para outra janela.
           </div>
         </div>
 
-        <!-- Bindings Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm border-collapse">
-            <thead>
-              <tr class="border-b border-slate-700 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                <th class="py-2 px-4" data-i18n="table_action">Ação</th>
-                <th class="py-2 px-4 text-center" data-i18n="table_keyboard">Entrada 1: Teclado</th>
-                <th class="py-2 px-4 text-center" data-i18n="table_joystick">Entrada 2: Joystick</th>
-              </tr>
-            </thead>
-            <tbody id="bindings-table-body">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
-        </div>
+        <!-- Card 5: Action Bindings Table -->
+        <div class="config-card">
+          <div class="config-card-title">
+            <iconify-icon icon="mdi:keyboard-settings" class="text-sky-400"></iconify-icon>
+            <span data-i18n="bindings_section_title">Mapeamento de Teclas e Botões:</span>
+          </div>
+          <div class="overflow-x-auto rounded-lg border border-slate-700/60 bg-slate-900/40">
+            <table class="w-full text-left text-sm border-collapse">
+              <thead>
+                <tr class="border-b border-slate-700/80 bg-slate-900/80 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  <th class="py-2.5 px-4" data-i18n="table_action">Ação</th>
+                  <th class="py-2.5 px-4 text-center" data-i18n="table_keyboard">Entrada 1: Teclado</th>
+                  <th class="py-2.5 px-4 text-center" data-i18n="table_joystick">Entrada 2: Joystick</th>
+                </tr>
+              </thead>
+              <tbody id="bindings-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
 
-        <div class="text-xs text-slate-400 bg-slate-800/40 p-3 rounded-lg border border-slate-700/40 flex items-start gap-2">
-          <iconify-icon icon="mdi:information" class="text-sky-400 text-lg flex-shrink-0 mt-0.5"></iconify-icon>
-          <span data-i18n="how_to_configure">
-            Como configurar: Clique no botão de uma ação para alterar sua tecla ou botão. Pressione a nova tecla no teclado ou direcional/botão no joystick. Analógicos e direcionais (D-Pad) são totalmente suportados!
-          </span>
+          <div class="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-lg border border-slate-800 flex items-start gap-2">
+            <iconify-icon icon="mdi:information" class="text-sky-400 text-lg flex-shrink-0 mt-0.5"></iconify-icon>
+            <span data-i18n="how_to_configure">
+              Como configurar: Clique no botão de uma ação para alterar sua tecla ou botão. Pressione a nova tecla no teclado ou direcional/botão no joystick. Analógicos e direcionais (D-Pad) são totalmente suportados!
+            </span>
+          </div>
         </div>
       </div>
 
