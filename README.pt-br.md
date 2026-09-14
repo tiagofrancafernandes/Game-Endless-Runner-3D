@@ -2,6 +2,8 @@
 
 🇧🇷 Versão em Português | [🇺🇸 English Version](README.md)
 
+![Endless Runner 3D Captura de Tela](./screenshot.png)
+
 Um jogo 3D **Endless Runner** vibrante, fluido e completo desenvolvido em **JavaScript puro (Vanilla JS)** com **Three.js**, **Vite** e **Iconify** (100% modular e agnóstico, sem dependência de React ou outros frameworks pesados).
 
 O projeto conta com jogabilidade infinita em 3 faixas, suporte completo a **Teclado**, **Joysticks / Gamepads físicos via USB/Bluetooth** (com layouts dedicados para Xbox e PlayStation e vibração háptica), **Controle Analógico Virtual (Thumbstick)** e **Botões de Toque (D-Pad)** para dispositivos móveis, efeitos sonoros e trilha sonora procedurais sintetizados em tempo real via **Web Audio API**, sistema de **Multilocalização (pt-BR e en-US)** com detecção automática, alternância de **Tela Cheia (Fullscreen)** e persistência de todas as configurações no **`localStorage`**.
@@ -94,6 +96,11 @@ O jogo possui um sistema de entrada unificado que suporta múltiplos métodos de
 - **Asas de Planador (*Hang Glider / Paraglider*)**:
   - Um toque rápido faz o personagem saltar normalmente.
   - **Manter pressionado** o botão de pulo (no teclado, controle físico, botão de toque `#touch-jump` ou puxando o analógico virtual para cima) faz abrir **asas de planador 3D**, sustentando o personagem no ar e permitindo planar suavemente com queda lenta.
+  - **Requisito e Consumo de Força (Strength)**:
+    - É necessário ter pelo menos **15% de Força** para abrir o planador.
+    - Planar consome força de forma contínua a 18 unidades/segundo.
+    - Se a força atingir 0% durante o voo, o planador se fecha automaticamente e emite um alerta.
+    - Ao correr no solo, a força regenera suavemente até 35%, permitindo que o jogador sempre volte a planar.
   - Assim que toca o solo (ou caso o botão seja solto), o planador se recolhe instantaneamente e a corrida continua sem interrupções.
 
 ### 2. Controles de Toque na Tela (Mobile / Tablets)
@@ -178,8 +185,12 @@ npm run preview
 ```
 jogo-threejs-joystick/
 ├── index.html                  # Interface HTML principal, HUD e modais
+├── README.md                   # Documentação em inglês (padrão)
+├── README.pt-br.md             # Documentação em português
+├── AGENTS.md                   # Diretrizes técnicas para agentes de IA e desenvolvedores
 ├── package.json                # Configuração do projeto e dependências
 ├── vite.config.js              # Configuração do Vite
+├── screenshot.png              # Captura de tela do jogo em ação UI
 ├── src/
 │   ├── main.js                 # Ponto de entrada, inicialização do jogo e UI
 │   ├── style.css               # Estilos com glassmorphism, HUD e controles

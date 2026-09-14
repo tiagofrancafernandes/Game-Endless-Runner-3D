@@ -2,6 +2,8 @@
 
 [🇧🇷 Versão em Português](README.pt-br.md) | 🇺🇸 English Version
 
+![Endless Runner 3D Screenshot](./screenshot.png)
+
 A vibrant, fluid, and full-featured **3D Endless Runner** web game built with **Pure Vanilla JavaScript (ES Modules)**, **Three.js**, **Vite**, and **Iconify** (100% modular and framework-agnostic, with zero dependencies on React, Vue, or other component frameworks).
 
 The game features infinite 3-lane gameplay, comprehensive support for **Keyboard**, **Physical Gamepads/Joysticks (USB & Bluetooth)** with dedicated layouts for Xbox and PlayStation controllers plus haptic rumble vibration, an on-screen **Virtual Analog Thumbstick** and **D-Pad Touch Buttons** for mobile devices with directional hold-to-repeat, real-time procedural audio and synthwave soundtrack via the **Web Audio API**, **Dynamic Multilingual Localization (`pt-BR` and `en-US`)** with auto-detection, responsive **Fullscreen Mode**, and full user preference persistence via **`localStorage`**.
@@ -94,6 +96,11 @@ The game features a unified input management system supporting multiple input de
 - **Hang Glider Wings (*Paraglider*)**:
   - Tapping the jump button triggers a standard acrobatic jump.
   - **Holding down** the jump action (on keyboard, physical controller, touch jump button `#touch-jump`, or pulling the virtual analog upward) deploys **3D hang-glider wings**, sustaining the character in the air with a gentle, slow gliding descent.
+  - **Strength Requirement & Drain**:
+    - Deploying the glider requires at least **15% Strength**.
+    - Gliding steadily consumes strength at a rate of 18 units/second.
+    - If strength depletes to 0% mid-flight, the glider wings automatically retract and a warning alert is triggered.
+    - Running on the ground gently recharges strength up to 35%, ensuring you can always glide again.
   - The moment the character's feet touch the ground (or if the jump button is released), the glider wings instantly vanish and normal running resumes seamlessly.
 
 ### 2. Touch Controls (Mobile / Tablets)
@@ -183,6 +190,7 @@ jogo-threejs-joystick/
 ├── README.md                   # English documentation (default)
 ├── README.pt-br.md             # Portuguese documentation
 ├── AGENTS.md                   # Technical guidelines for AI agents & contributors
+├── screenshot.png              # In-game gameplay screenshot
 ├── src/
 │   ├── main.js                 # Entry point, game and UI bootstrap
 │   ├── style.css               # Styling, glassmorphism, responsive HUD, and touch controls
