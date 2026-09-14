@@ -65,6 +65,12 @@ The game features infinite 3-lane gameplay, comprehensive support for **Keyboard
 - Quick keyboard shortcut using the **`F`** key.
 - Dynamic icon and tooltip state updates (`fullscreenchange`).
 
+### 7. Auto-Pause on Focus Loss (Tab & Window Blur)
+- Automatically pauses the game when you switch to another browser tab, minimize the window, or focus another application (`window.blur` & `document.visibilitychange`).
+- Prevents unfair deaths, obstacle collisions, or missed fruits while you are away.
+- Automatically suspends Web Audio context in background tabs to eliminate audio thread glitches and battery drain.
+- Can be enabled or disabled anytime in the Control Settings modal (enabled by default).
+
 ---
 
 ## 🕹️ Controls: Keyboard, Physical Gamepad & Touch
@@ -127,6 +133,7 @@ All player preferences are saved automatically across sessions:
 - `endless_runner_gamepad_preset`: Controller naming preset (`xinput` or `dualshock`).
 - `endless_runner_controls`: Customized keyboard and gamepad action bindings.
 - `endless_runner_touch_mode`: Active touch control mode (`dpad` or `analog`).
+- `endless_runner_auto_pause`: Auto-pause preference on focus loss (`true` or `false`).
 
 ---
 

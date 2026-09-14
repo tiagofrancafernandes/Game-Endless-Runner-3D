@@ -29,6 +29,7 @@ export const translations = {
     touch_mode_notice_analog: 'Controles na tela: Analógico',
     glider_no_strength: 'Sem Força para planar!',
     glider_exhausted: 'Força esgotada!',
+    auto_paused_notice: 'Jogo pausado (foco perdido)',
 
     // Fruits
     fruit_apple: 'Maçã',
@@ -51,6 +52,10 @@ export const translations = {
     btn_test_vibration: 'Testar Vibração (DualShock / Xbox)',
     naming_mode: 'Modo de Nomenclatura do Joystick:',
     naming_desc: 'Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).',
+    auto_pause_title: 'Pausar ao Perder Foco (Aba / Janela):',
+    auto_pause_desc: 'Pausa o jogo automaticamente caso você mude de aba, minimize o navegador ou alterne para outra janela.',
+    auto_pause_enabled: 'Ativado (Pausar ao sair)',
+    auto_pause_disabled: 'Desativado (Manter rodando)',
     touch_control_title: 'Controles na Tela (Toque / Mobile):',
     touch_control_desc: 'Escolha entre usar botões com setas direcionais ou o controle analógico virtual.',
     touch_mode_dpad_label: 'Setas Direcionais',
@@ -162,6 +167,7 @@ export const translations = {
     touch_mode_notice_analog: 'On-screen controls: Analog Stick',
     glider_no_strength: 'Not enough Strength to glide!',
     glider_exhausted: 'Strength exhausted!',
+    auto_paused_notice: 'Game paused (focus lost)',
 
     // Fruits
     fruit_apple: 'Apple',
@@ -184,6 +190,10 @@ export const translations = {
     btn_test_vibration: 'Test Vibration (DualShock / Xbox)',
     naming_mode: 'Gamepad Naming Mode:',
     naming_desc: 'Switch to view button labels with Xbox or PlayStation (PS2, PS3, PS4, PS5) naming.',
+    auto_pause_title: 'Auto-Pause on Focus Loss (Tab / Window):',
+    auto_pause_desc: 'Automatically pauses the game when switching tabs, minimizing the browser, or switching windows.',
+    auto_pause_enabled: 'Enabled (Pause when leaving)',
+    auto_pause_disabled: 'Disabled (Keep running)',
     touch_control_title: 'On-Screen Controls (Touch / Mobile):',
     touch_control_desc: 'Choose between directional arrow buttons or a virtual analog thumbstick.',
     touch_mode_dpad_label: 'Directional Arrows',

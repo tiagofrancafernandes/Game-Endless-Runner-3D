@@ -43,8 +43,17 @@ export class Game {
     this.isPaused = false;
     this.lastTime = performance.now();
 
-    // Bind loop
+    // Auto-pause when losing window/tab focus (default: true, persisted in localStorage)
+    this.autoPauseEnabled = this.loadAutoPauseSetting();
+
+    // Bind loop & event handlers
     this.loop = this.loop.bind(this);
+    this.handleWindowBlur = this.handleWindowBlur.bind(this);
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+
+    window.addEventListener('blur', this.handleWindowBlur);
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+
     requestAnimationFrame(this.loop);
   }
 
@@ -69,6 +78,53 @@ export class Game {
     }
     if (!this.isPaused) {
       this.lastTime = performance.now();
+    }
+  }
+
+  loadAutoPauseSetting() {
+    try {
+      const saved = localStorage.getItem('endless_runner_auto_pause');
+      return saved !== null ? saved === 'true' : true;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  setAutoPauseEnabled(enabled) {
+    this.autoPauseEnabled = !!enabled;
+    try {
+      localStorage.setItem('endless_runner_auto_pause', this.autoPauseEnabled.toString());
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  handleWindowBlur() {
+    if (this.autoPauseEnabled && !this.isPaused) {
+      this.setPaused(true);
+      if (this.uiManager) {
+        this.uiManager.showFloatingNotice(i18n.t('auto_paused_notice'), '#38bdf8');
+      }
+    }
+  }
+
+  handleVisibilityChange() {
+    if (document.hidden) {
+      if (this.autoPauseEnabled && !this.isPaused) {
+        this.setPaused(true);
+        if (this.uiManager) {
+          this.uiManager.showFloatingNotice(i18n.t('auto_paused_notice'), '#38bdf8');
+        }
+      }
+      // Suspend Web Audio while tab is hidden to avoid audio thread buildup
+      if (audioManager.ctx && audioManager.ctx.state === 'running') {
+        audioManager.ctx.suspend().catch(() => {});
+      }
+    } else {
+      // Resume Web Audio when tab returns
+      if (audioManager.ctx && audioManager.ctx.state === 'suspended') {
+        audioManager.ctx.resume().catch(() => {});
+      }
     }
   }
 

@@ -163,6 +163,29 @@ export class UIManager {
       });
     }
 
+    // Auto-Pause options in settings modal
+    const optAutoPauseOn = document.getElementById('opt-auto-pause-on');
+    if (optAutoPauseOn) {
+      optAutoPauseOn.addEventListener('click', () => {
+        if (this.game) {
+          this.game.setAutoPauseEnabled(true);
+          this.updateAutoPauseUI();
+          audioManager.playClick();
+        }
+      });
+    }
+
+    const optAutoPauseOff = document.getElementById('opt-auto-pause-off');
+    if (optAutoPauseOff) {
+      optAutoPauseOff.addEventListener('click', () => {
+        if (this.game) {
+          this.game.setAutoPauseEnabled(false);
+          this.updateAutoPauseUI();
+          audioManager.playClick();
+        }
+      });
+    }
+
     // Keyboard shortcut for Fullscreen ('F')
     window.addEventListener('keydown', (e) => {
       if (inputManager && inputManager.isListening) return;
@@ -374,12 +397,31 @@ export class UIManager {
 
   openSettings() {
     audioManager.playClick();
+    if (this.game && !this.game.isPaused) {
+      this.game.setPaused(true);
+    }
     if (this.settingsModal) {
       this.settingsModal.classList.remove('hidden');
       this.updatePresetButtons();
       this.updateTouchModeUI();
+      this.updateAutoPauseUI();
       this.renderKeybindingRows();
       this.checkGamepadConnection();
+    }
+  }
+
+  updateAutoPauseUI() {
+    const btnOn = document.getElementById('opt-auto-pause-on');
+    const btnOff = document.getElementById('opt-auto-pause-off');
+    const isEnabled = this.game ? this.game.autoPauseEnabled : true;
+    if (btnOn && btnOff) {
+      if (isEnabled) {
+        btnOn.classList.add('active-preset');
+        btnOff.classList.remove('active-preset');
+      } else {
+        btnOff.classList.add('active-preset');
+        btnOn.classList.remove('active-preset');
+      }
     }
   }
 

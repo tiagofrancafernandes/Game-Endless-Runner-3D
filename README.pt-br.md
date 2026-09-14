@@ -67,6 +67,12 @@ O projeto conta com jogabilidade infinita em 3 faixas, suporte completo a **Tecl
 - Atalho rápido pelo teclado através da tecla **`F`**.
 - Atualização dinâmica do ícone e tooltip de acordo com o estado (`fullscreenchange`).
 
+### 7. Pausa Automática ao Perder Foco (Aba e Janela)
+- Pausa o jogo automaticamente caso você mude de aba, minimize o navegador ou alterne para outra janela/aplicativo (`window.blur` e `document.visibilitychange`).
+- Evita colisões injustas com obstáculos ou perda de frutas enquanto você estiver fora da janela.
+- Suspende automaticamente a Web Audio API em abas ocultas para evitar travamentos de áudio e economizar bateria.
+- Pode ser facilmente ativada ou desativada no modal de Configurações (ativada por padrão).
+
 ---
 
 ## 🕹️ Controles: Teclado, Joysticks Físicos e Touch
@@ -129,6 +135,7 @@ Todas as preferências do usuário são salvas automaticamente:
 - `endless_runner_gamepad_preset`: Preset do controle (`xinput` ou `dualshock`).
 - `endless_runner_controls`: Mapeamento customizado de teclas e botões de joystick.
 - `endless_runner_touch_mode`: Modo de toque preferido (`dpad` ou `analog`).
+- `endless_runner_auto_pause`: Preferência de pausa automática ao perder foco (`true` ou `false`).
 
 ---
 

@@ -193,7 +193,7 @@ body, html {
 /* Floating Notifications */
 #floating-notifications {
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 50%;
   transform: translateX(-50%);
   pointer-events: none;
@@ -202,6 +202,7 @@ body, html {
   align-items: center;
   gap: 0.5rem;
   z-index: 20;
+  opacity: 0.6;
 }
 
 .floating-notice {

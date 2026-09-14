@@ -91,6 +91,7 @@ This document provides architectural context, development standards, operational
   - `endless_runner_gamepad_preset`: Active controller preset (`xinput` | `dualshock`).
   - `endless_runner_controls`: Customized action-to-key/button bindings.
   - `endless_runner_touch_mode`: Active touch mode (`dpad` | `analog`).
+  - `endless_runner_auto_pause`: Auto-pause preference on focus loss (`true` | `false`).
 - Always wrap `localStorage` access in `try / catch` blocks to gracefully handle restricted browser environments (e.g., private browsing mode or iframe sandbox).
 
 ### Rule 5: Touch Controls & Mobile Ergonomics
