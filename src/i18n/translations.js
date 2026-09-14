@@ -27,6 +27,8 @@ export const translations = {
     key_configured: 'Controle configurado com sucesso!',
     touch_mode_notice_dpad: 'Controles na tela: Setas',
     touch_mode_notice_analog: 'Controles na tela: Analógico',
+    glider_no_strength: 'Sem Força para planar!',
+    glider_exhausted: 'Força esgotada!',
 
     // Fruits
     fruit_apple: 'Maçã',
@@ -158,6 +160,8 @@ export const translations = {
     key_configured: 'Control configured successfully!',
     touch_mode_notice_dpad: 'On-screen controls: D-Pad',
     touch_mode_notice_analog: 'On-screen controls: Analog Stick',
+    glider_no_strength: 'Not enough Strength to glide!',
+    glider_exhausted: 'Strength exhausted!',
 
     // Fruits
     fruit_apple: 'Apple',

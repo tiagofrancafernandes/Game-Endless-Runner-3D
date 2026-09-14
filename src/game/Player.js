@@ -23,6 +23,8 @@ export class Player {
     this.glideTime = 0;
     this.gliderHoldThreshold = 0.18; // Minimum hold time (~180ms) to deploy glider
     this.jumpOriginGround = false;   // Tracks if current jump originated from the ground
+    this.onLowStrength = null;       // Callback when trying to glide without enough strength
+    this.hasWarnedLowStrength = false;
 
     // Invulnerability & Hit state
     this.isInvulnerable = false;
@@ -340,7 +342,14 @@ export class Player {
     this.targetX = 0;
   }
 
-  update(delta, gameSpeed, particleSystem, isJumpHeld = false) {
+  cancelGliding() {
+    if (this.isGliding) {
+      this.isGliding = false;
+      if (this.gliderGroup) this.gliderGroup.visible = false;
+    }
+  }
+
+  update(delta, gameSpeed, particleSystem, isJumpHeld = false, canGlide = true) {
     // Smooth lane transition (lerp)
     this.group.position.x += (this.targetX - this.group.position.x) * Math.min(1, delta * 14);
 
@@ -352,34 +361,38 @@ export class Player {
     if (!this.isGrounded) {
       this.airTime += delta;
 
-      // Deploy glider if jump action is held while airborne
+      // Deploy glider if jump action is held while airborne and enough strength is available
       if (isJumpHeld && this.airTime >= this.gliderHoldThreshold) {
         if (!this.isGliding) {
-          this.isGliding = true;
-          if (this.gliderGroup) this.gliderGroup.visible = true;
-          audioManager.playGliderOpen();
+          if (canGlide) {
+            this.isGliding = true;
+            if (this.gliderGroup) this.gliderGroup.visible = true;
+            audioManager.playGliderOpen();
 
-          // If coming from the ground, the glider jump reaches noticeably higher
-          if (this.jumpOriginGround) {
-            this.jumpOriginGround = false;
-            this.vy = 5.6; // High soaring launch boost from ground
-          } else {
-            // Mid-air / fall deploy: gentle thermal lift pop
-            if (this.y < 4.2) {
-              this.vy = 3.2;
+            // If coming from the ground, the glider jump reaches noticeably higher
+            if (this.jumpOriginGround) {
+              this.jumpOriginGround = false;
+              this.vy = 5.6; // High soaring launch boost from ground
             } else {
-              this.vy = Math.max(this.vy, 0.5);
+              // Mid-air / fall deploy: gentle thermal lift pop
+              if (this.y < 4.2) {
+                this.vy = 3.2;
+              } else {
+                this.vy = Math.max(this.vy, 0.5);
+              }
             }
-          }
 
-          if (particleSystem) {
-            particleSystem.createRunningDust(this.group.position);
+            if (particleSystem) {
+              particleSystem.createRunningDust(this.group.position);
+            }
+          } else if (!this.hasWarnedLowStrength) {
+            this.hasWarnedLowStrength = true;
+            if (this.onLowStrength) this.onLowStrength();
           }
         }
       } else if (!isJumpHeld && this.isGliding) {
         // Player released jump in mid-air -> retract glider
-        this.isGliding = false;
-        if (this.gliderGroup) this.gliderGroup.visible = false;
+        this.cancelGliding();
       }
 
       if (this.isGliding) {
@@ -409,12 +422,10 @@ export class Player {
         this.airTime = 0;
         this.glideTime = 0;
         this.jumpOriginGround = false;
+        this.hasWarnedLowStrength = false;
 
         // "sumindo as asas do planador assim que toca o chão"
-        if (this.isGliding) {
-          this.isGliding = false;
-          if (this.gliderGroup) this.gliderGroup.visible = false;
-        }
+        this.cancelGliding();
 
         // Landing dust puffs
         if (particleSystem) {

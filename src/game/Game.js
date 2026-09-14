@@ -18,6 +18,11 @@ export class Game {
     this.sceneManager = new SceneManager(this.canvas);
     this.particleSystem = new ParticleSystem(this.sceneManager.scene);
     this.player = new Player(this.sceneManager.scene);
+    this.player.onLowStrength = () => {
+      if (this.uiManager) {
+        this.uiManager.showFloatingNotice(i18n.t('glider_no_strength'), '#f97316');
+      }
+    };
     this.obstacleManager = new ObstacleManager(this.sceneManager.scene);
     this.fruitManager = new FruitManager(this.sceneManager.scene);
 
@@ -129,8 +134,27 @@ export class Game {
     // Evaluate if jump is currently held across any input method
     const isJumpHeld = inputManager.isPressed(ACTION_JUMP) || this.touchJumpHeld || this.joystickJumpHeld;
 
-    // Update Player (with glider jump-hold detection)
-    this.player.update(delta, this.gameSpeed, this.particleSystem, isJumpHeld);
+    // Minimum strength required to open the glider
+    const minGliderStrength = 15;
+    const canGlide = this.strength >= minGliderStrength;
+
+    // Update Player (with glider jump-hold detection and strength check)
+    this.player.update(delta, this.gameSpeed, this.particleSystem, isJumpHeld, canGlide);
+
+    // Consume strength while gliding, cancel glider if strength depletes
+    if (this.player.isGliding) {
+      const strengthDrainRate = 18; // units per second
+      this.strength = Math.max(0, this.strength - strengthDrainRate * delta);
+      if (this.strength <= 0) {
+        this.player.cancelGliding();
+        if (this.uiManager) {
+          this.uiManager.showFloatingNotice(i18n.t('glider_exhausted'), '#ef4444');
+        }
+      }
+    } else if (this.player.isGrounded && this.strength < 35) {
+      // Gentle recovery while running on the ground up to baseline 35
+      this.strength = Math.min(35, this.strength + 3 * delta);
+    }
 
     // Update Obstacles & Fruits
     this.obstacleManager.update(delta, this.gameSpeed, this.player.group.position.z);
