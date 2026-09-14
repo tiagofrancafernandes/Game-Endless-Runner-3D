@@ -24,18 +24,12 @@ export class I18nManager {
 
   detectLocale() {
     try {
-      const saved = localStorage.getItem('endless_runner_locale');
-      if (saved && (saved === 'pt-BR' || saved === 'en-US')) {
-        return saved;
       // 1. Check localStorage first (user saved preferences)
       const saved = localStorage.getItem('endless_runner_locale') || localStorage.getItem('endless_runner_lang');
       const normalizedSaved = this.normalizeLocale(saved);
       if (normalizedSaved) {
         return normalizedSaved;
       }
-      if (typeof navigator !== 'undefined' && navigator.language) {
-        if (navigator.language.toLowerCase().startsWith('pt')) {
-          return 'pt-BR';
 
       // 2. Check browser navigator languages in priority order
       if (typeof navigator !== 'undefined') {
@@ -63,13 +57,6 @@ export class I18nManager {
   }
 
   setLocale(newLocale) {
-    if (newLocale !== 'pt-BR' && newLocale !== 'en-US') return;
-    this.locale = newLocale;
-    try {
-      localStorage.setItem('endless_runner_locale', this.locale);
-    } catch (e) {
-      console.warn(e);
-    }
     const normalized = this.normalizeLocale(newLocale);
     if (!normalized) return;
 
