@@ -4,7 +4,8 @@
 
 🎮 **Teste Online (Live Demo)**: [https://endless-runner-game-delta.vercel.app/](https://endless-runner-game-delta.vercel.app/)
 
-![Endless Runner 3D Captura de Tela](./screenshot.pt-br.png)
+![Endless Runner 3D Screenshot](./screenshot.png)
+![Endless Runner 3D Screenshot 'pt-br'](./screenshot.pt-br.png)
 
 Um jogo 3D **Endless Runner** vibrante, fluido e completo desenvolvido em **JavaScript puro (Vanilla JS)** com **Three.js**, **Vite** e **Iconify** (100% modular e agnóstico, sem dependência de React ou outros frameworks pesados).
 

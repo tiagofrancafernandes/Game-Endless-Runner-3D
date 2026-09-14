@@ -3,6 +3,7 @@
 [🇧🇷 Versão em Português](README.pt-br.md) | 🇺🇸 English Version
 
 ![Endless Runner 3D Screenshot](./screenshot.png)
+![Endless Runner 3D Screenshot 'pt-br'](./screenshot.pt-br.png)
 
 A vibrant, fluid, and full-featured **3D Endless Runner** web game built with **Pure Vanilla JavaScript (ES Modules)**, **Three.js**, **Vite**, and **Iconify** (100% modular and framework-agnostic, with zero dependencies on React, Vue, or other component frameworks).
 
