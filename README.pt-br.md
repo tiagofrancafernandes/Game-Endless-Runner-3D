@@ -2,7 +2,9 @@
 
 🇧🇷 Versão em Português | [🇺🇸 English Version](README.md)
 
-![Endless Runner 3D Captura de Tela](./screenshot.png)
+🎮 **Teste Online (Live Demo)**: [https://endless-runner-game-delta.vercel.app/](https://endless-runner-game-delta.vercel.app/)
+
+![Endless Runner 3D Captura de Tela](./screenshot.pt-br.png)
 
 Um jogo 3D **Endless Runner** vibrante, fluido e completo desenvolvido em **JavaScript puro (Vanilla JS)** com **Three.js**, **Vite** e **Iconify** (100% modular e agnóstico, sem dependência de React ou outros frameworks pesados).
 
@@ -142,6 +144,8 @@ Todas as preferências do usuário são salvas automaticamente:
 
 ## 🚀 Como Executar Localmente
 
+> **Experimente no navegador**: Você pode testar e jogar diretamente sem precisar instalar nada através de [endless-runner-game-delta.vercel.app](https://endless-runner-game-delta.vercel.app/).
+
 ### Pré-requisitos
 - **Node.js** (versão 18 ou superior)
 - **npm** ou **yarn** / **pnpm**
@@ -190,7 +194,8 @@ jogo-threejs-joystick/
 ├── AGENTS.md                   # Diretrizes técnicas para agentes de IA e desenvolvedores
 ├── package.json                # Configuração do projeto e dependências
 ├── vite.config.js              # Configuração do Vite
-├── screenshot.png              # Captura de tela do jogo em ação UI
+├── screenshot.png              # Captura de tela do jogo (HUD em inglês)
+├── screenshot.pt-br.png        # Captura de tela do jogo (HUD em português)
 ├── src/
 │   ├── main.js                 # Ponto de entrada, inicialização do jogo e UI
 │   ├── style.css               # Estilos com glassmorphism, HUD e controles

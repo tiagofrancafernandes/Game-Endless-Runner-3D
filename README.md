@@ -190,7 +190,8 @@ jogo-threejs-joystick/
 ├── README.md                   # English documentation (default)
 ├── README.pt-br.md             # Portuguese documentation
 ├── AGENTS.md                   # Technical guidelines for AI agents & contributors
-├── screenshot.png              # In-game gameplay screenshot
+├── screenshot.png              # In-game gameplay screenshot (English HUD)
+├── screenshot.pt-br.png        # In-game gameplay screenshot (Portuguese HUD)
 ├── src/
 │   ├── main.js                 # Entry point, game and UI bootstrap
 │   ├── style.css               # Styling, glassmorphism, responsive HUD, and touch controls
