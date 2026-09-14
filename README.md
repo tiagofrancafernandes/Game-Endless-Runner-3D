@@ -1,207 +1,210 @@
 # Endless Runner 3D - Three.js & Joystick
 
-[🇺🇸 English Version](README.md) | [🇧🇷 Versão em Português](README.pt-br.md)
+[🇧🇷 Versão em Português](README.pt-br.md) | [🇺🇸 English Version](README.md)
 
-Um jogo 3D **Endless Runner** vibrante, fluido e completo desenvolvido em **JavaScript puro (Vanilla JS)** com **Three.js**, **Vite** e **Iconify** (100% modular e agnóstico, sem dependência de React ou outros frameworks pesados).
+A vibrant, fluid, and full-featured **3D Endless Runner** web game built with **Pure Vanilla JavaScript (ES Modules)**, **Three.js**, **Vite**, and **Iconify** (100% modular and framework-agnostic, with zero dependencies on React, Vue, or other component frameworks).
 
-O projeto conta com jogabilidade infinita em 3 faixas, suporte completo a **Teclado**, **Joysticks / Gamepads físicos via USB/Bluetooth** (com layouts dedicados para Xbox e PlayStation e vibração háptica), **Controle Analógico Virtual (Thumbstick)** e **Botões de Toque (D-Pad)** para dispositivos móveis, efeitos sonoros e trilha sonora procedurais sintetizados em tempo real via **Web Audio API**, sistema de **Multilocalização (pt-BR e en-US)** com detecção automática, alternância de **Tela Cheia (Fullscreen)** e persistência de todas as configurações no **`localStorage`**.
-
----
-
-## 🎮 Mecânicas e Funcionalidades do Jogo
-
-### 1. Cenário e Gráficos 3D (Three.js)
-- **Pista Infinita com 3 Faixas**:
-  - Estrada com faixas divisórias tracejadas e marcadores laterais que se movem gerando forte sensação de velocidade.
-  - Terreno circundante com gramados, pinheiros, árvores frondosas estilizadas e nuvens procedurais no céu.
-  - Efeito de neblina suave no horizonte (*fog*) e iluminação dinâmica com sombras suaves (`PCFSoftShadowMap`).
-  - Câmera suave em terceira pessoa com amortecimento que acompanha as manobras laterais e saltos do personagem.
-- **Personagem 3D Estilizado e Animado**:
-  - Modelado proceduralmente em Three.js (carregamento instantâneo sem arquivos 3D externos pesados).
-  - Rosto amigável e detalhado voltado para a direção da corrida, com olhos expressivos, pupilas, sorriso e boné com aba.
-  - Mochila nas costas visível pela câmera em terceira pessoa.
-  - Animação contínua de corrida sincronizada com a velocidade, inclinação lateral nas curvas, salto acrobático e partículas de poeira levantadas no solo.
-
-### 2. Obstáculos e Dinâmica de Colisão
-- **Obstáculos Variados**:
-  - Troncos de árvores caídos com musgo, barreiras de trânsito listradas com refletores e pedras no asfalto.
-  - Frequência justa e progressão de velocidade suave com a distância percorrida.
-- **Colisão Sem Fim (*Endless*)**:
-  - Ao bater em um obstáculo, o jogador perde pontos (-120 pts), perde vida (-25%) e força (-20%), estremece, pisca em invulnerabilidade temporária e **retorna suavemente para o meio (faixa central)** continuando a correr.
-  - O jogo não possui tela frustrante de game over: mesmo que a barra de vida esgote, o personagem recupera o fôlego e continua correndo infinitamente.
-
-### 3. Frutas Colecionáveis 3D
-- **Variedade de Frutas**:
-  - **Maçãs vermelhas** (+60 pts, +12% vida, +15% força)
-  - **Bananas douradas** (+80 pts, +15% vida, +18% força)
-  - **Cerejas duplas** (+100 pts, +18% vida, +20% força)
-  - **Laranjas cítricas** (+120 pts, +20% vida, +25% força)
-- Flutuam e giram suavemente pelo caminho, dispostas em fileiras ou em arcos de salto.
-- Coletá-las gera um som harmônico (*chime* sintetizado), partículas coloridas específicas para cada fruta e notificações na tela.
-
-### 4. Áudio Procedural em Tempo Real (Web Audio API)
-- Efeitos sonoros gerados por síntese via código, sem necessidade de carregar arquivos de áudio externos (.mp3/.wav):
-  - Som de salto parabólico (onda triangular com modulação de frequência).
-  - Som de impacto com obstáculo (onda dente de serra com ruído filtrado).
-  - Chimes musicais harmônicos para coleta de frutas.
-  - Trilha sonora chiptune/synthwave retrô contínua e dinâmica.
-- **Controles Rápidos de Áudio no HUD**:
-  - Mudo Geral (`iconify-icon icon="mdi:volume-high"` / `mdi:volume-off`).
-  - Ativar / Desativar Efeitos Sonoros (SFX) (`mdi:bell-ring` / `mdi:bell-off`).
-  - Ativar / Desativar Música de Fundo (BGM) (`mdi:music` / `mdi:music-off`).
-
-### 5. Multilocalização Dinâmica (i18n)
-- Suporte completo aos idiomas **Português (`pt-BR`)** e **Inglês (`en-US`)**.
-- Detecção automática do idioma do navegador na inicialização.
-- Botão de alternância instantânea no HUD (`PT` / `EN`).
-- Atualização em tempo real de interface, modais, tooltips, notificações, nomes de botões do joystick e nomes das frutas.
-- Persistência da preferência de idioma no `localStorage`.
-
-### 6. Tela Cheia (Fullscreen)
-- Botão dedicado no HUD para entrar e sair de tela cheia.
-- Atalho rápido pelo teclado através da tecla **`F`**.
-- Atualização dinâmica do ícone e tooltip de acordo com o estado (`fullscreenchange`).
+The game features infinite 3-lane gameplay, comprehensive support for **Keyboard**, **Physical Gamepads/Joysticks (USB & Bluetooth)** with dedicated layouts for Xbox and PlayStation controllers plus haptic rumble vibration, an on-screen **Virtual Analog Thumbstick** and **D-Pad Touch Buttons** for mobile devices with directional hold-to-repeat, real-time procedural audio and synthwave soundtrack via the **Web Audio API**, **Dynamic Multilingual Localization (`pt-BR` and `en-US`)** with auto-detection, responsive **Fullscreen Mode**, and full user preference persistence via **`localStorage`**.
 
 ---
 
-## 🕹️ Controles: Teclado, Joysticks Físicos e Touch
+## 🎮 Game Mechanics & Features
 
-O jogo possui um sistema de entrada unificado que suporta múltiplos métodos de controle simultaneamente:
+### 1. 3D World & Graphics (Three.js)
+- **Infinite 3-Lane Track**:
+  - Continuous road with moving dashed lane dividers and edge curbs delivering a high-speed sensation.
+  - Surrounding scenery with green plains, stylized pine and leafy trees, and dynamic procedural clouds.
+  - Soft atmospheric fog and dynamic lighting with smooth shadows (`PCFSoftShadowMap`).
+  - Third-person perspective camera with smooth damping that tracks lateral lane switching and jumps.
+- **Stylized 3D Animated Character**:
+  - Procedurally modeled with Three.js primitive geometries (instant loading without heavy external 3D files).
+  - Detailed, friendly face oriented toward the running direction (`-Z`), featuring expressive eyes, pupils, a smile, and a peaked cap.
+  - Character backpack visible from the third-person camera angle.
+  - Continuous running animation synchronized with game speed, banking tilt during turns, jump arc physics with gravity, and ground landing dust particles.
 
-### 1. Teclado e Gamepad / Joystick Físico (USB e Bluetooth)
-- **Presets de Nomenclatura**:
+### 2. Obstacles & Collision Dynamics
+- **Varied Obstacles**:
+  - Mossy fallen tree logs, striped safety road barriers with reflective panels, and boulders on the pavement.
+  - Fair distribution and smooth difficulty progression ramping up speed based on distance traveled.
+- **Infinite (*Endless*) Run Flow**:
+  - Colliding with an obstacle causes points loss (-120 pts), life reduction (-25%), and strength loss (-20%), triggers visual flinching and invulnerability blinking, and **smoothly returns the character to the center lane** to keep running.
+  - No frustrating game over screens: even if health depletes, the runner recovers breath and continues running indefinitely.
+
+### 3. Collectible 3D Fruits
+- **Assortment of Fruits**:
+  - **Red Apples** (+60 pts, +12% health, +15% strength)
+  - **Golden Bananas** (+80 pts, +15% health, +18% strength)
+  - **Twin Cherries** (+100 pts, +18% health, +20% strength)
+  - **Citrus Oranges** (+120 pts, +20% health, +25% strength)
+- Fruits float and spin gently in the air, arranged in rows or curved jump arcs.
+- Collecting fruits triggers a synthesized musical chime, color-coded particle spark bursts, and floating score notifications.
+
+### 4. Real-Time Procedural Audio (Web Audio API)
+- Pure synthesized sound effects generated in code without loading external `.mp3` or `.wav` assets:
+  - Jump whoosh sound (triangle wave with frequency modulation).
+  - Obstacle bump impact sound (sawtooth wave with filtered noise).
+  - Harmonic fruit pickup chimes.
+  - Retro chiptune / synthwave procedural background music (BGM).
+- **Quick Audio HUD Controls**:
+  - Master Mute (`iconify-icon icon="mdi:volume-high"` / `mdi:volume-off`).
+  - Toggle Sound Effects (SFX) (`mdi:bell-ring` / `mdi:bell-off`).
+  - Toggle Background Music (BGM) (`mdi:music` / `mdi:music-off`).
+
+### 5. Dynamic Multilingual Support (i18n)
+- Full localization for **English (`en-US`)** and **Portuguese (`pt-BR`)**.
+- Automatic browser language detection on initial launch.
+- Quick toggle button in the top HUD (`EN` / `PT`).
+- Real-time updates across HUD labels, modals, tooltips, floating notices, gamepad button legends, and fruit names.
+- Language preference saved to `localStorage`.
+
+### 6. Fullscreen Mode
+- Dedicated button in the HUD to enter and exit fullscreen.
+- Quick keyboard shortcut using the **`F`** key.
+- Dynamic icon and tooltip state updates (`fullscreenchange`).
+
+---
+
+## 🕹️ Controls: Keyboard, Physical Gamepad & Touch
+
+The game features a unified input management system supporting multiple input devices concurrently:
+
+### 1. Keyboard and Physical Gamepad / Joystick (USB & Bluetooth)
+- **Controller Naming Presets**:
   - **Xbox (XInput)**: `A`, `B`, `X`, `Y`, `LB`, `RB`, `LT`, `RT`, `View`, `Menu`, `D-Pad`, etc.
-  - **PlayStation (DualShock / DualSense)**: `✕ (Cruz)`, `○ (Círculo)`, `□ (Quadrado)`, `△ (Triângulo)`, `L1`, `R1`, `L2`, `R2`, `Share`, `Options`, `D-Pad`, `L3`, etc.
-- **2 Entradas por Ação (Teclado + Joystick)**:
-  - Cada ação possui dois slots independentes configuráveis:
-    - Slot 1: Teclado
-    - Slot 2: Joystick (botões digitais, direcionais D-Pad ou eixos analógicos com deadzone configurável)
-- **Remapeamento Interativo**:
-  - Clique em qualquer slot no modal de configurações e pressione a nova tecla ou botão do controle.
-- **Vibração Háptica no Controle**:
-  - Suporte à API Gamepad Haptics (`dual-rumble`).
-  - O controle vibra durante os impactos com obstáculos e emite pulsos suaves ao coletar frutas.
-  - Botão **"Testar Vibração"** disponível no modal de configurações.
+  - **PlayStation (DualShock / DualSense)**: `✕ (Cross)`, `○ (Circle)`, `□ (Square)`, `△ (Triangle)`, `L1`, `R1`, `L2`, `R2`, `Share`, `Options`, `D-Pad`, `L3`, etc.
+- **2 Inputs per Action (Keyboard + Joystick)**:
+  - Each action features two independent configurable binding slots:
+    - Slot 1: Keyboard key
+    - Slot 2: Joystick button, D-Pad direction, or analog stick axis (with deadzone)
+- **Interactive Remapping**:
+  - Click any slot in the Settings Modal and press the new key on your keyboard or button on your gamepad.
+- **Haptic Rumble Feedback**:
+  - Native Gamepad Haptics API (`dual-rumble`) support.
+  - The controller vibrates on obstacle collisions and gives subtle vibration pulses when collecting fruits.
+  - Dedicated **"Test Vibration"** button inside the Control Settings modal.
 
-| Ação | Teclado Padrão | Alternativas | Joystick (Xbox) | Joystick (PlayStation) |
+| Action | Default Keyboard | Alternative | Joystick (Xbox) | Joystick (PlayStation) |
 |---|---|---|---|---|
-| **Mover para Esquerda** | `Seta Esquerda` | `A` | `D-Pad Esquerda` ou `Analógico Esq (←)` | `D-Pad Esquerda` ou `Analógico Esq (←)` |
-| **Mover para Direita** | `Seta Direita` | `D` | `D-Pad Direita` ou `Analógico Esq (→)` | `D-Pad Direita` ou `Analógico Esq (→)` |
-| **Pular Obstáculo** | `Barra de Espaço` | `Seta Cima` / `W` | `Botão A` | `Botão ✕ (Cruz)` |
-| **Pausar / Continuar** | `Esc` | `P` | `Menu / Start` | `Options / Start` |
-| **Tela Cheia** | `F` | — | — | — |
+| **Move Left** | `Left Arrow` | `A` | `D-Pad Left` or `Left Stick (←)` | `D-Pad Left` or `Left Stick (←)` |
+| **Move Right** | `Right Arrow` | `D` | `D-Pad Right` or `Left Stick (→)` | `D-Pad Right` or `Left Stick (→)` |
+| **Jump Obstacle** | `Spacebar` | `Up Arrow` / `W` | `A Button` | `✕ (Cross) Button` |
+| **Pause / Resume** | `Esc` | `P` | `Menu / Start` | `Options / Start` |
+| **Fullscreen** | `F` | — | — | — |
 
-### 2. Controles de Toque na Tela (Mobile / Tablets)
-- **Dois Modos Disponíveis**:
-  1. **Setas Direcionais (D-Pad)**: Botões estilizados com setas direcionais para esquerda e direita, além do botão de salto.
-  2. **Controle Analógico Virtual (`VirtualJoystick`)**: Thumbstick circular com retorno em mola, cálculo vetorial polar, zona morta e detecção de salto ao puxar o analógico para cima.
-- **Alternância Rápida**:
-  - Botão dedicado no HUD para alternar entre Setas e Analógico com um clique.
-  - Seletor de modo nas Configurações de Controles.
-- **Manter Direção Pressionada (Auto-Repeat)**:
-  - Ao manter o analógico inclinado ou os botões de seta/teclas pressionados, o movimento é invocado continuamente (delay inicial de 220ms e repetição a cada 180ms), permitindo atravessar faixas suavemente.
-- **Ergonomia e Responsividade**:
-  - Controles posicionados acima das áreas de toque do sistema e safe areas (`calc(3.5rem + env(safe-area-inset-bottom))`).
-  - Em celulares e tablets, os botões de ação do topo são centralizados para facilitar o alcance com as duas mãos.
-
----
-
-## 💾 Persistência de Dados (`localStorage`)
-
-Todas as preferências do usuário são salvas automaticamente:
-- `endless_runner_locale`: Idioma selecionado (`pt-BR` ou `en-US`).
-- `endless_runner_audio`: Configurações de som (mudo geral, SFX ligado/desligado, BGM ligado/desligado).
-- `endless_runner_gamepad_preset`: Preset do controle (`xinput` ou `dualshock`).
-- `endless_runner_controls`: Mapeamento customizado de teclas e botões de joystick.
-- `endless_runner_touch_mode`: Modo de toque preferido (`dpad` ou `analog`).
+### 2. Touch Controls (Mobile / Tablets)
+- **Two Selectable Modes**:
+  1. **Directional Arrows (D-Pad)**: Clean round touch buttons for left and right lane shifts, and an elevated jump button.
+  2. **Virtual Analog Joystick (`VirtualJoystick`)**: Circular spring-back thumbstick with polar vector clamping, deadzone calibration, and pull-up jump detection.
+- **Instant Mode Toggle**:
+  - Dedicated HUD button to switch between D-Pad and Virtual Analog with one tap.
+  - Preference selector in the Settings Modal.
+- **Hold-to-Repeat (Continuous Directional Movement)**:
+  - Holding the analog stick tilted or holding the touch arrow buttons/keyboard keys continuously triggers lane movements (initial delay of 220ms, repeated every 180ms).
+- **Ergonomics & Safe Areas**:
+  - On-screen controls elevated above browser navigation bars and mobile safe areas (`calc(3.5rem + env(safe-area-inset-bottom))`).
+  - Top HUD action buttons automatically center horizontally on mobile and tablet screens for balanced two-handed accessibility, while aligning right on desktop.
 
 ---
 
-## 🛠️ Tecnologias e Bibliotecas
+## 💾 Data Persistence (`localStorage`)
 
-- **[Three.js](https://threejs.org/)**: Renderização 3D via WebGL, câmera perspectiva, luz solar direcional, sombras suaves, névoa e animação esquelética/procedural.
-- **[Vite](https://vitejs.dev/)**: Ferramenta de build de última geração com recarregamento ultrarrápido (HMR).
-- **[Iconify](https://iconify.design/)**: Ícones vetoriais modernos (`<iconify-icon>`) sem pacotes de fontes pesados.
-- **Web Audio API**: Motor sonoro sintetizado em tempo real.
-- **Gamepad API**: Detecção de joysticks, deadzone analógico e vibração háptica de duplo motor.
-- **HTML5 Fullscreen API**: Alternância responsiva de tela cheia.
+All player preferences are saved automatically across sessions:
+- `endless_runner_locale`: Selected language (`en-US` or `pt-BR`).
+- `endless_runner_audio`: Audio preferences (master mute, SFX toggle, BGM toggle).
+- `endless_runner_gamepad_preset`: Controller naming preset (`xinput` or `dualshock`).
+- `endless_runner_controls`: Customized keyboard and gamepad action bindings.
+- `endless_runner_touch_mode`: Active touch control mode (`dpad` or `analog`).
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🛠️ Built With
 
-### Pré-requisitos
-- **Node.js** (versão 18 ou superior)
-- **npm** ou **yarn** / **pnpm**
+- **[Three.js](https://threejs.org/)**: 3D WebGL renderer, perspective camera, directional lighting, soft shadow maps, fog, and procedural meshes.
+- **[Vite](https://vitejs.dev/)**: Next-generation frontend build tool with instantaneous Hot Module Replacement (HMR).
+- **[Iconify](https://iconify.design/)**: Modern vector icon web component (`<iconify-icon>`).
+- **Web Audio API**: Real-time procedural audio and retro synth music engine.
+- **Gamepad API**: Gamepad detection, analog stick polling, and dual-motor haptic rumble.
+- **HTML5 Fullscreen API**: Responsive fullscreen mode.
 
-### Instalação
+---
 
-1. Clone o repositório:
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js** (version 18 or higher)
+- **npm**, **yarn**, or **pnpm**
+
+### Installation
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/tiagofrancafernandes/Game-Endless-Runner-3D.git
 cd Game-Endless-Runner-3D
 ```
 
-2. Instale as dependências:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Inicie o servidor de desenvolvimento:
+3. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Abra a URL exibida no terminal (por padrão `http://localhost:5173/`).
+4. Open the local URL displayed in your terminal (typically `http://localhost:5173/`).
 
-### Compilação para Produção
+### Production Build
 
-Para gerar os arquivos estáticos otimizados para distribuição na pasta `dist/`:
+To compile minified, production-ready static assets to the `dist/` directory:
 ```bash
 npm run build
 ```
 
-Para pré-visualizar o build de produção localmente:
+To preview the production build locally:
 ```bash
 npm run preview
 ```
 
 ---
 
-## 📁 Estrutura de Diretórios
+## 📁 Directory Structure
 
 ```
 jogo-threejs-joystick/
-├── index.html                  # Interface HTML principal, HUD e modais
-├── package.json                # Configuração do projeto e dependências
-├── vite.config.js              # Configuração do Vite
+├── index.html                  # Main markup, canvas, HUD, and modal dialogs
+├── package.json                # Project dependencies and npm scripts
+├── vite.config.js              # Vite configuration
+├── README.md                   # English documentation (default)
+├── README.pt-br.md             # Portuguese documentation
+├── AGENTS.md                   # Technical guidelines for AI agents & contributors
 ├── src/
-│   ├── main.js                 # Ponto de entrada, inicialização do jogo e UI
-│   ├── style.css               # Estilos com glassmorphism, HUD e controles
+│   ├── main.js                 # Entry point, game and UI bootstrap
+│   ├── style.css               # Styling, glassmorphism, responsive HUD, and touch controls
 │   ├── audio/
-│   │   └── AudioManager.js     # Sintetizador procedural via Web Audio API
+│   │   └── AudioManager.js     # Web Audio API procedural sound and music synthesizer
 │   ├── entities/
 │   ├── game/
-│   │   ├── Game.js             # Loop principal, estados, pontuação e colisões
-│   │   ├── Player.js           # Malha 3D do personagem, física e animações
-│   │   ├── SceneManager.js     # Cenário 3D, pista, iluminação, sombras e câmera
-│   │   ├── ObstacleManager.js  # Criação procedural e pooling de obstáculos
-│   │   ├── FruitManager.js     # Criação de frutas 3D colecionáveis e rotação
-│   │   └── ParticleSystem.js   # Sistema de partículas para poeira e coleta
+│   │   ├── Game.js             # Core game loop, game state, speeds, and collisions
+│   │   ├── Player.js           # 3D player mesh, physics, lane switching, and animations
+│   │   ├── SceneManager.js     # Three.js scene, camera, lights, road, clouds, and fog
+│   │   ├── ObstacleManager.js  # Procedural obstacle spawning and object pooling
+│   │   ├── FruitManager.js     # 3D collectible fruits, rotation, and pickup logic
+│   │   └── ParticleSystem.js   # Particle system for dust puffs and fruit pickup sparks
 │   ├── i18n/
-│   │   ├── I18nManager.js      # Gerenciador de idiomas e subscrição reativa
-│   │   └── translations.js     # Dicionários em pt-BR e en-US
+│   │   ├── I18nManager.js      # Locale management and reactive subscriber pattern
+│   │   └── translations.js     # Dictionaries for pt-BR and en-US
 │   ├── input/
-│   │   ├── GamepadAdapter.js   # Gamepad API, vibração e presets Xbox/PlayStation
-│   │   ├── InputManager.js     # Gerenciador unificado de entradas e auto-repeat
-│   │   └── KeyConfig.js        # Mapeamentos de teclas e persistência
+│   │   ├── GamepadAdapter.js   # Gamepad API, haptics, and Xbox/PlayStation presets
+│   │   ├── InputManager.js     # Unified input manager with hold auto-repeat
+│   │   └── KeyConfig.js        # Action binding configuration and localStorage persistence
 │   └── ui/
-│       ├── UIManager.js        # Gerenciamento de HUD, modais, eventos e i18n
-│       └── VirtualJoystick.js  # Analógico virtual na tela com física de mola
+│       ├── UIManager.js        # HUD updates, modals, audio controls, and touch events
+│       └── VirtualJoystick.js  # Virtual analog thumbstick with spring-back physics
 ```
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está sob licença MIT. Sinta-se livre para clonar, estudar e aprimorar.
+This project is licensed under the MIT License. Feel free to clone, learn from, and adapt the code!
