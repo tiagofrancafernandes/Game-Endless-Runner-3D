@@ -1,6 +1,7 @@
 /**
  * VirtualJoystick - On-screen virtual analog thumbstick for touch & pointer devices.
- * Controls lane switching (Left / Right) and Jump (pull up) with smooth spring-back physics.
+ * Controls lane switching (Left / Right) and Jump (pull up) with smooth spring-back physics
+ * and continuous hold repeat when tilted in a direction.
  */
 export class VirtualJoystick {
   constructor(container, callbacks = {}) {
@@ -23,6 +24,12 @@ export class VirtualJoystick {
     this.lastDirection = 0; // -1 (left), 0 (center), 1 (right)
     this.jumpTriggered = false;
 
+    // Continuous hold repeat timings
+    this.initialRepeatDelay = 220; // ms before continuous repeat kicks in
+    this.repeatInterval = 180;     // ms between repeated triggers while held
+    this.nextRepeatTime = 0;
+    this.rafId = null;
+
     this.initEvents();
   }
 
@@ -33,6 +40,39 @@ export class VirtualJoystick {
     window.addEventListener('pointermove', (e) => this.onPointerMove(e));
     window.addEventListener('pointerup', (e) => this.onPointerUp(e));
     window.addEventListener('pointercancel', (e) => this.onPointerUp(e));
+    window.addEventListener('blur', () => this.reset());
+  }
+
+  startHoldLoop() {
+    if (this.rafId) return;
+    const tick = () => {
+      if (this.activePointerId !== null) {
+        this.checkHoldRepeat();
+        this.rafId = requestAnimationFrame(tick);
+      } else {
+        this.rafId = null;
+      }
+    };
+    this.rafId = requestAnimationFrame(tick);
+  }
+
+  stopHoldLoop() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  checkHoldRepeat() {
+    const now = performance.now();
+    if (this.lastDirection !== 0 && now >= this.nextRepeatTime) {
+      if (this.lastDirection === -1) {
+        this.onMoveLeft();
+      } else if (this.lastDirection === 1) {
+        this.onMoveRight();
+      }
+      this.nextRepeatTime = now + this.repeatInterval;
+    }
   }
 
   onPointerDown(e) {
@@ -50,6 +90,7 @@ export class VirtualJoystick {
     this.centerY = rect.top + rect.height / 2;
 
     this.updateStick(e.clientX, e.clientY);
+    this.startHoldLoop();
   }
 
   onPointerMove(e) {
@@ -84,20 +125,25 @@ export class VirtualJoystick {
     const nx = clampedX / this.maxRadius;
     const ny = clampedY / this.maxRadius;
 
-    // Horizontal lane movement with hysteresis
+    const now = performance.now();
+
+    // Horizontal lane movement with hysteresis and continuous hold repeat
     if (nx < -this.moveThreshold) {
       if (this.lastDirection !== -1) {
         this.lastDirection = -1;
         this.onMoveLeft();
+        this.nextRepeatTime = now + this.initialRepeatDelay;
       }
     } else if (nx > this.moveThreshold) {
       if (this.lastDirection !== 1) {
         this.lastDirection = 1;
         this.onMoveRight();
+        this.nextRepeatTime = now + this.initialRepeatDelay;
       }
     } else if (Math.abs(nx) < 0.22) {
       // Re-centered horizontally, allow next lane switch
       this.lastDirection = 0;
+      this.nextRepeatTime = 0;
     }
 
     // Vertical jump trigger (push stick upward)
@@ -112,10 +158,12 @@ export class VirtualJoystick {
   }
 
   reset() {
+    this.stopHoldLoop();
     if (this.knob) {
       this.knob.style.transform = 'translate(0px, 0px)';
     }
     this.lastDirection = 0;
+    this.nextRepeatTime = 0;
     this.jumpTriggered = false;
   }
 }

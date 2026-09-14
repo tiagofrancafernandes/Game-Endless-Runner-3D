@@ -270,18 +270,41 @@ export class UIManager {
     const touchRight = document.getElementById('touch-right');
     const touchJump = document.getElementById('touch-jump');
 
-    if (touchLeft) {
-      touchLeft.addEventListener('pointerdown', (e) => {
+    const setupRepeatingTouchButton = (btn, actionCallback) => {
+      if (!btn) return;
+      let timer = null;
+      let interval = null;
+
+      const stopRepeat = () => {
+        if (timer) clearTimeout(timer);
+        if (interval) clearInterval(interval);
+        timer = null;
+        interval = null;
+      };
+
+      btn.addEventListener('pointerdown', (e) => {
         e.preventDefault();
-        if (this.game && !this.game.isPaused) this.game.player.moveLeft();
+        stopRepeat();
+        actionCallback();
+        timer = setTimeout(() => {
+          interval = setInterval(() => {
+            actionCallback();
+          }, 180);
+        }, 220);
       });
-    }
-    if (touchRight) {
-      touchRight.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        if (this.game && !this.game.isPaused) this.game.player.moveRight();
-      });
-    }
+
+      btn.addEventListener('pointerup', stopRepeat);
+      btn.addEventListener('pointercancel', stopRepeat);
+      btn.addEventListener('pointerleave', stopRepeat);
+    };
+
+    setupRepeatingTouchButton(touchLeft, () => {
+      if (this.game && !this.game.isPaused) this.game.player.moveLeft();
+    });
+
+    setupRepeatingTouchButton(touchRight, () => {
+      if (this.game && !this.game.isPaused) this.game.player.moveRight();
+    });
     if (touchJump) {
       touchJump.addEventListener('pointerdown', (e) => {
         e.preventDefault();

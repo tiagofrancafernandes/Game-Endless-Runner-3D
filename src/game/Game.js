@@ -91,10 +91,10 @@ export class Game {
 
     if (this.isPaused) return;
 
-    // Movement controls
-    if (inputManager.isJustPressed(ACTION_LEFT)) {
+    // Movement controls (supports holding/repeating direction)
+    if (inputManager.isTriggered(ACTION_LEFT)) {
       this.player.moveLeft();
-    } else if (inputManager.isJustPressed(ACTION_RIGHT)) {
+    } else if (inputManager.isTriggered(ACTION_RIGHT)) {
       this.player.moveRight();
     }
 

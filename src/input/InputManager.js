@@ -18,6 +18,19 @@ export class InputManager {
 
     this.prevActionState = { ...this.actionState };
 
+    this.actionNextRepeat = {
+      MOVE_LEFT: 0,
+      MOVE_RIGHT: 0,
+      JUMP: 0,
+      PAUSE: 0
+    };
+    this.actionTriggered = {
+      MOVE_LEFT: false,
+      MOVE_RIGHT: false,
+      JUMP: false,
+      PAUSE: false
+    };
+
     // Listening / Rebinding state
     this.isListening = false;
     this.listeningAction = null;
@@ -175,6 +188,30 @@ export class InputManager {
       this.actionState[action] = active;
     }
 
+    // Process hold auto-repeat for directional actions
+    const now = performance.now();
+    const initialDelay = 220; // ms
+    const repeatInterval = 180; // ms
+
+    for (const action in this.actionState) {
+      if (this.actionState[action]) {
+        if (!this.prevActionState[action]) {
+          // Just pressed
+          this.actionTriggered[action] = true;
+          this.actionNextRepeat[action] = now + initialDelay;
+        } else if (now >= this.actionNextRepeat[action]) {
+          // Held past repeat threshold
+          this.actionTriggered[action] = true;
+          this.actionNextRepeat[action] = now + repeatInterval;
+        } else {
+          this.actionTriggered[action] = false;
+        }
+      } else {
+        this.actionTriggered[action] = false;
+        this.actionNextRepeat[action] = 0;
+      }
+    }
+
     // Clear one-frame keyboard events
     this.keysJustPressed.clear();
   }
@@ -185,6 +222,10 @@ export class InputManager {
 
   isJustPressed(action) {
     return !!this.actionState[action] && !this.prevActionState[action];
+  }
+
+  isTriggered(action) {
+    return !!this.actionTriggered[action];
   }
 }
 
