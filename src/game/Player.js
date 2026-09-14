@@ -354,6 +354,17 @@ export class Player {
           this.isGliding = true;
           if (this.gliderGroup) this.gliderGroup.visible = true;
           audioManager.playGliderOpen();
+
+          // Upward lift upon opening glider (even when opened during fall)
+          if (this.y < 3.8) {
+            this.vy = 3.2; // Gentle thermal lift pop
+          } else {
+            this.vy = Math.max(this.vy, 0.5);
+          }
+
+          if (particleSystem) {
+            particleSystem.createRunningDust(this.group.position);
+          }
         }
       } else if (!isJumpHeld && this.isGliding) {
         // Player released jump in mid-air -> retract glider

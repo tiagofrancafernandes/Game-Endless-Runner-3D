@@ -274,7 +274,7 @@ export class AudioManager {
     // Upbeat electronic melodic sequence
     const tempo = 135; // BPM
     const stepTime = (60 / tempo) / 2; // 8th notes (approx 0.22s)
-    
+
     // Bass notes & Lead melody pattern
     const bassNotes = [110, 110, 130.81, 146.83, 110, 110, 164.81, 146.83]; // A2, C3, D3, E3
     const leadNotes = [
