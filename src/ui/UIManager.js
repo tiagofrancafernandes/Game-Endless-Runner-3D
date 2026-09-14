@@ -112,6 +112,18 @@ export class UIManager {
     document.addEventListener('mozfullscreenchange', onFullscreenChange);
     document.addEventListener('MSFullscreenChange', onFullscreenChange);
 
+    // Keyboard shortcut for Fullscreen ('F')
+    window.addEventListener('keydown', (e) => {
+      if (inputManager && inputManager.isListening) return;
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
+      if (e.code === 'KeyF' || e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        this.toggleFullscreen();
+        audioManager.playClick();
+      }
+    });
+
     // Pause modal buttons
     const btnResume = document.getElementById('btn-resume');
     if (btnResume) {

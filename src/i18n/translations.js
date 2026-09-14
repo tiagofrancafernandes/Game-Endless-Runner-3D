@@ -8,12 +8,12 @@ export const translations = {
     distance: 'Distância',
 
     // Tooltips
-    btn_pause_title: 'Pausar Jogo (Esc / Start)',
+    btn_pause_title: 'Pausar Jogo (Esc / P / Start)',
     btn_mute_title: 'Mutar / Desmutar Som Geral',
     btn_sfx_title: 'Efeitos Sonoros (SFX)',
     btn_music_title: 'Música de Fundo (BGM)',
-    btn_fullscreen_enter: 'Tela Cheia',
-    btn_fullscreen_exit: 'Sair da Tela Cheia',
+    btn_fullscreen_enter: 'Tela Cheia (F)',
+    btn_fullscreen_exit: 'Sair da Tela Cheia (F)',
     btn_settings_title: 'Configurações de Controles',
     btn_lang_title: 'Alternar Idioma (Português / English)',
 
@@ -131,12 +131,12 @@ export const translations = {
     distance: 'Distance',
 
     // Tooltips
-    btn_pause_title: 'Pause Game (Esc / Start)',
+    btn_pause_title: 'Pause Game (Esc / P / Start)',
     btn_mute_title: 'Mute / Unmute Master Audio',
     btn_sfx_title: 'Sound Effects (SFX)',
     btn_music_title: 'Background Music (BGM)',
-    btn_fullscreen_enter: 'Fullscreen',
-    btn_fullscreen_exit: 'Exit Fullscreen',
+    btn_fullscreen_enter: 'Fullscreen (F)',
+    btn_fullscreen_exit: 'Exit Fullscreen (F)',
     btn_settings_title: 'Control Settings',
     btn_lang_title: 'Switch Language (Português / English)',
 

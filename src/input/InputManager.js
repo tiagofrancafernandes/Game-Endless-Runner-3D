@@ -155,6 +155,7 @@ export class InputManager {
         if (action === 'MOVE_LEFT' && (this.keysDown.has('KeyA') || this.keysDown.has('ArrowLeft'))) active = true;
         if (action === 'MOVE_RIGHT' && (this.keysDown.has('KeyD') || this.keysDown.has('ArrowRight'))) active = true;
         if (action === 'JUMP' && (this.keysDown.has('KeyW') || this.keysDown.has('ArrowUp') || this.keysDown.has('Space'))) active = true;
+        if (action === 'PAUSE' && (this.keysDown.has('KeyP') || this.keysDown.has('Escape'))) active = true;
       }
 
       // 2. Check Joystick primary binding
