@@ -14,6 +14,8 @@ export const translations = {
     btn_music_title: 'Música de Fundo (BGM)',
     btn_fullscreen_enter: 'Tela Cheia (F)',
     btn_fullscreen_exit: 'Sair da Tela Cheia (F)',
+    btn_touch_mode_dpad: 'Controles de Toque: Setas (clique para Analógico)',
+    btn_touch_mode_analog: 'Controles de Toque: Analógico (clique para Setas)',
     btn_settings_title: 'Configurações de Controles',
     btn_lang_title: 'Alternar Idioma (Português / English)',
 
@@ -23,6 +25,8 @@ export const translations = {
     vibration_ok: 'Vibração executada!',
     vibration_fail: 'Vibração não suportada ou controle desconectado',
     key_configured: 'Controle configurado com sucesso!',
+    touch_mode_notice_dpad: 'Controles na tela: Setas',
+    touch_mode_notice_analog: 'Controles na tela: Analógico',
 
     // Fruits
     fruit_apple: 'Maçã',
@@ -45,6 +49,10 @@ export const translations = {
     btn_test_vibration: 'Testar Vibração (DualShock / Xbox)',
     naming_mode: 'Modo de Nomenclatura do Joystick:',
     naming_desc: 'Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).',
+    touch_control_title: 'Controles na Tela (Toque / Mobile):',
+    touch_control_desc: 'Escolha entre usar botões com setas direcionais ou o controle analógico virtual.',
+    touch_mode_dpad_label: 'Setas Direcionais',
+    touch_mode_analog_label: 'Controle Analógico',
     table_action: 'Ação',
     table_keyboard: 'Entrada 1: Teclado',
     table_joystick: 'Entrada 2: Joystick',
@@ -137,6 +145,8 @@ export const translations = {
     btn_music_title: 'Background Music (BGM)',
     btn_fullscreen_enter: 'Fullscreen (F)',
     btn_fullscreen_exit: 'Exit Fullscreen (F)',
+    btn_touch_mode_dpad: 'Touch Controls: D-Pad (click for Analog)',
+    btn_touch_mode_analog: 'Touch Controls: Analog (click for D-Pad)',
     btn_settings_title: 'Control Settings',
     btn_lang_title: 'Switch Language (Português / English)',
 
@@ -146,6 +156,8 @@ export const translations = {
     vibration_ok: 'Vibration triggered!',
     vibration_fail: 'Vibration not supported or controller disconnected',
     key_configured: 'Control configured successfully!',
+    touch_mode_notice_dpad: 'On-screen controls: D-Pad',
+    touch_mode_notice_analog: 'On-screen controls: Analog Stick',
 
     // Fruits
     fruit_apple: 'Apple',
@@ -168,6 +180,10 @@ export const translations = {
     btn_test_vibration: 'Test Vibration (DualShock / Xbox)',
     naming_mode: 'Gamepad Naming Mode:',
     naming_desc: 'Switch to view button labels with Xbox or PlayStation (PS2, PS3, PS4, PS5) naming.',
+    touch_control_title: 'On-Screen Controls (Touch / Mobile):',
+    touch_control_desc: 'Choose between directional arrow buttons or a virtual analog thumbstick.',
+    touch_mode_dpad_label: 'Directional Arrows',
+    touch_mode_analog_label: 'Virtual Analog',
     table_action: 'Action',
     table_keyboard: 'Input 1: Keyboard',
     table_joystick: 'Input 2: Joystick',

@@ -3,10 +3,13 @@ import { gamepadAdapter, PRESET_XINPUT, PRESET_DUALSHOCK } from '../input/Gamepa
 import { keyConfig, ACTION_LEFT, ACTION_RIGHT, ACTION_JUMP, ACTION_PAUSE, getActionName } from '../input/KeyConfig.js';
 import { inputManager } from '../input/InputManager.js';
 import { i18n } from '../i18n/I18nManager.js';
+import { VirtualJoystick } from './VirtualJoystick.js';
 
 export class UIManager {
   constructor() {
     this.game = null;
+    this.virtualJoystick = null;
+    this.touchMode = this.loadTouchMode();
 
     // Cache DOM elements
     this.elScore = document.getElementById('hud-score');
@@ -30,6 +33,7 @@ export class UIManager {
     this.updateAudioIcons();
     this.updateLangButton();
     this.updateFullscreenIcon();
+    this.updateTouchModeUI();
     i18n.applyDomTranslations();
     this.renderKeybindingRows();
     this.checkGamepadConnection();
@@ -37,6 +41,7 @@ export class UIManager {
     i18n.subscribe(() => {
       this.updateLangButton();
       this.updateFullscreenIcon();
+      this.updateTouchModeUI();
       this.renderKeybindingRows();
       this.checkGamepadConnection();
     });
@@ -44,6 +49,22 @@ export class UIManager {
 
   setGame(game) {
     this.game = game;
+    const joystickContainer = document.getElementById('touch-joystick-container');
+    if (joystickContainer) {
+      this.virtualJoystick = new VirtualJoystick(joystickContainer, {
+        onMoveLeft: () => {
+          if (this.game && !this.game.isPaused) this.game.player.moveLeft();
+        },
+        onMoveRight: () => {
+          if (this.game && !this.game.isPaused) this.game.player.moveRight();
+        },
+        onJump: () => {
+          if (this.game && !this.game.isPaused) {
+            if (this.game.player.jump()) audioManager.playJump();
+          }
+        }
+      });
+    }
   }
 
   initEventListeners() {
@@ -111,6 +132,33 @@ export class UIManager {
     document.addEventListener('webkitfullscreenchange', onFullscreenChange);
     document.addEventListener('mozfullscreenchange', onFullscreenChange);
     document.addEventListener('MSFullscreenChange', onFullscreenChange);
+
+    // Toggle Touch Control Mode button
+    const btnToggleTouch = document.getElementById('btn-toggle-touch');
+    if (btnToggleTouch) {
+      btnToggleTouch.addEventListener('click', () => {
+        const next = this.touchMode === 'dpad' ? 'analog' : 'dpad';
+        this.setTouchMode(next);
+        audioManager.playClick();
+      });
+    }
+
+    // Touch control mode options in settings modal
+    const touchOptDpad = document.getElementById('touch-opt-dpad');
+    if (touchOptDpad) {
+      touchOptDpad.addEventListener('click', () => {
+        this.setTouchMode('dpad');
+        audioManager.playClick();
+      });
+    }
+
+    const touchOptAnalog = document.getElementById('touch-opt-analog');
+    if (touchOptAnalog) {
+      touchOptAnalog.addEventListener('click', () => {
+        this.setTouchMode('analog');
+        audioManager.playClick();
+      });
+    }
 
     // Keyboard shortcut for Fullscreen ('F')
     window.addEventListener('keydown', (e) => {
@@ -296,6 +344,7 @@ export class UIManager {
     if (this.settingsModal) {
       this.settingsModal.classList.remove('hidden');
       this.updatePresetButtons();
+      this.updateTouchModeUI();
       this.renderKeybindingRows();
       this.checkGamepadConnection();
     }
@@ -492,6 +541,76 @@ export class UIManager {
       if (btnMusic) {
         if (audioManager.musicEnabled) btnMusic.classList.remove('opacity-40');
         else btnMusic.classList.add('opacity-40');
+      }
+    }
+  }
+
+  loadTouchMode() {
+    try {
+      const saved = localStorage.getItem('endless_runner_touch_mode');
+      if (saved === 'analog' || saved === 'dpad') {
+        return saved;
+      }
+    } catch (e) {
+      console.warn('Could not load touch mode from localStorage:', e);
+    }
+    return 'dpad';
+  }
+
+  setTouchMode(mode) {
+    this.touchMode = mode === 'analog' ? 'analog' : 'dpad';
+    try {
+      localStorage.setItem('endless_runner_touch_mode', this.touchMode);
+    } catch (e) {
+      console.warn('Could not save touch mode to localStorage:', e);
+    }
+    this.updateTouchModeUI();
+    const noticeKey = this.touchMode === 'analog' ? 'touch_mode_notice_analog' : 'touch_mode_notice_dpad';
+    this.showFloatingNotice(i18n.t(noticeKey), '#38bdf8');
+  }
+
+  updateTouchModeUI() {
+    const isAnalog = this.touchMode === 'analog';
+    const clusterLeft = document.getElementById('touch-cluster-left');
+    const joystickContainer = document.getElementById('touch-joystick-container');
+    const btnToggleTouch = document.getElementById('btn-toggle-touch');
+    const touchModeIcon = document.getElementById('touch-mode-icon');
+    const touchOptDpad = document.getElementById('touch-opt-dpad');
+    const touchOptAnalog = document.getElementById('touch-opt-analog');
+
+    if (clusterLeft) {
+      if (isAnalog) {
+        clusterLeft.classList.add('hidden');
+      } else {
+        clusterLeft.classList.remove('hidden');
+      }
+    }
+
+    if (joystickContainer) {
+      if (isAnalog) {
+        joystickContainer.classList.remove('hidden');
+      } else {
+        joystickContainer.classList.add('hidden');
+      }
+    }
+
+    if (btnToggleTouch) {
+      const key = isAnalog ? 'btn_touch_mode_analog' : 'btn_touch_mode_dpad';
+      btnToggleTouch.setAttribute('title', i18n.t(key));
+      btnToggleTouch.setAttribute('data-i18n-title', key);
+    }
+
+    if (touchModeIcon) {
+      touchModeIcon.setAttribute('icon', isAnalog ? 'mdi:controller' : 'mdi:axis-arrow');
+    }
+
+    if (touchOptDpad && touchOptAnalog) {
+      if (isAnalog) {
+        touchOptAnalog.classList.add('active-preset');
+        touchOptDpad.classList.remove('active-preset');
+      } else {
+        touchOptDpad.classList.add('active-preset');
+        touchOptAnalog.classList.remove('active-preset');
       }
     }
   }

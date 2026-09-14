@@ -95,6 +95,11 @@
           <iconify-icon id="fullscreen-icon" icon="mdi:fullscreen"></iconify-icon>
         </button>
 
+        <!-- Toggle Touch Control Mode (D-Pad vs Analog) -->
+        <button id="btn-toggle-touch" class="hud-btn" data-i18n-title="btn_touch_mode_dpad" title="Controles de Toque: Setas (clique para Analógico)">
+          <iconify-icon id="touch-mode-icon" icon="mdi:axis-arrow"></iconify-icon>
+        </button>
+
         <!-- Settings / Controls Button -->
         <button id="btn-open-settings" class="hud-btn" data-i18n-title="btn_settings_title" title="Configurações de Teclas e Joystick">
           <iconify-icon icon="mdi:controller"></iconify-icon>
@@ -107,14 +112,29 @@
 
     <!-- On-screen Touch Controls (Mobile/Touch fallback) -->
     <div class="touch-controls interactive">
-      <div class="touch-cluster-left">
-        <button id="touch-left" class="touch-btn" aria-label="Esquerda">
-          <iconify-icon icon="mdi:arrow-left-bold"></iconify-icon>
-        </button>
-        <button id="touch-right" class="touch-btn" aria-label="Direita">
-          <iconify-icon icon="mdi:arrow-right-bold"></iconify-icon>
-        </button>
+      <!-- Left Controls: Directional Arrows OR Virtual Analog Joystick -->
+      <div class="touch-left-wrapper">
+        <!-- D-Pad Arrows Mode -->
+        <div id="touch-cluster-left" class="touch-cluster-left">
+          <button id="touch-left" class="touch-btn" aria-label="Esquerda">
+            <iconify-icon icon="mdi:arrow-left-bold"></iconify-icon>
+          </button>
+          <button id="touch-right" class="touch-btn" aria-label="Direita">
+            <iconify-icon icon="mdi:arrow-right-bold"></iconify-icon>
+          </button>
+        </div>
+
+        <!-- Virtual Analog Joystick Mode -->
+        <div id="touch-joystick-container" class="touch-joystick-container hidden">
+          <div id="touch-joystick-base" class="touch-joystick-base">
+            <div id="touch-joystick-knob" class="touch-joystick-knob">
+              <iconify-icon icon="mdi:crosshairs-gps" class="text-sky-300 text-lg"></iconify-icon>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Jump Button -->
       <button id="touch-jump" class="touch-btn" aria-label="Pular">
         <iconify-icon icon="mdi:arrow-up-bold"></iconify-icon>
       </button>
@@ -190,6 +210,26 @@
           </div>
           <div class="text-xs text-slate-400 mt-2" data-i18n="naming_desc">
             Alterne para ver os botões com os nomes do controle do Xbox ou do PlayStation (PS2, PS3, PS4, PS5).
+          </div>
+        </div>
+
+        <!-- Touch Control Mode Selector (Mobile/Tablet) -->
+        <div class="preset-section">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1" data-i18n="touch_control_title">
+            Controles na Tela (Toque / Mobile):
+          </div>
+          <div class="preset-selector">
+            <button id="touch-opt-dpad" class="preset-btn active-preset">
+              <iconify-icon icon="mdi:arrow-all" class="text-sky-400 text-xl"></iconify-icon>
+              <span data-i18n="touch_mode_dpad_label">Setas Direcionais</span>
+            </button>
+            <button id="touch-opt-analog" class="preset-btn">
+              <iconify-icon icon="mdi:axis-arrow" class="text-amber-400 text-xl"></iconify-icon>
+              <span data-i18n="touch_mode_analog_label">Controle Analógico</span>
+            </button>
+          </div>
+          <div class="text-xs text-slate-400 mt-2" data-i18n="touch_control_desc">
+            Escolha entre usar botões com setas direcionais ou o controle analógico virtual.
           </div>
         </div>
 

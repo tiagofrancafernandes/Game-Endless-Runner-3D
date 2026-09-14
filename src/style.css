@@ -245,6 +245,59 @@ body, html {
   gap: 0.75rem;
 }
 
+/* Touch Left Wrapper (holds arrows or virtual analog) */
+.touch-left-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* Virtual Analog Joystick */
+.touch-joystick-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.touch-joystick-base {
+  width: 104px;
+  height: 104px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 2px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.touch-joystick-base:active {
+  cursor: grabbing;
+  border-color: #38bdf8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 25px rgba(56, 189, 248, 0.35);
+}
+
+.touch-joystick-knob {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #334155, #0f172a);
+  border: 2px solid #38bdf8;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 10px rgba(56, 189, 248, 0.4);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform;
+}
+
 .touch-btn {
   width: 4.2rem;
   height: 4.2rem;
