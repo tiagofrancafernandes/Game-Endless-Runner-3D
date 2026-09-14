@@ -1,6 +1,6 @@
 # Endless Runner 3D - Three.js & Joystick
 
-[🇺🇸 English Version](README.md) | [🇧🇷 Versão em Português](README.pt-br.md)
+🇧🇷 Versão em Português | [🇺🇸 English Version](README.md)
 
 Um jogo 3D **Endless Runner** vibrante, fluido e completo desenvolvido em **JavaScript puro (Vanilla JS)** com **Three.js**, **Vite** e **Iconify** (100% modular e agnóstico, sem dependência de React ou outros frameworks pesados).
 
@@ -87,9 +87,14 @@ O jogo possui um sistema de entrada unificado que suporta múltiplos métodos de
 |---|---|---|---|---|
 | **Mover para Esquerda** | `Seta Esquerda` | `A` | `D-Pad Esquerda` ou `Analógico Esq (←)` | `D-Pad Esquerda` ou `Analógico Esq (←)` |
 | **Mover para Direita** | `Seta Direita` | `D` | `D-Pad Direita` ou `Analógico Esq (→)` | `D-Pad Direita` ou `Analógico Esq (→)` |
-| **Pular Obstáculo** | `Barra de Espaço` | `Seta Cima` / `W` | `Botão A` | `Botão ✕ (Cruz)` |
+| **Pular / Planar** | `Barra de Espaço` (segure no ar para planar) | `Seta Cima` / `W` | `Botão A` | `Botão ✕ (Cruz)` |
 | **Pausar / Continuar** | `Esc` | `P` | `Menu / Start` | `Options / Start` |
 | **Tela Cheia** | `F` | — | — | — |
+
+- **Asas de Planador (*Hang Glider / Paraglider*)**:
+  - Um toque rápido faz o personagem saltar normalmente.
+  - **Manter pressionado** o botão de pulo (no teclado, controle físico, botão de toque `#touch-jump` ou puxando o analógico virtual para cima) faz abrir **asas de planador 3D**, sustentando o personagem no ar e permitindo planar suavemente com queda lenta.
+  - Assim que toca o solo (ou caso o botão seja solto), o planador se recolhe instantaneamente e a corrida continua sem interrupções.
 
 ### 2. Controles de Toque na Tela (Mobile / Tablets)
 - **Dois Modos Disponíveis**:

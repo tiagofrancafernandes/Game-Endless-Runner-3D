@@ -1,6 +1,6 @@
 # Endless Runner 3D - Three.js & Joystick
 
-[🇧🇷 Versão em Português](README.pt-br.md) | [🇺🇸 English Version](README.md)
+[🇧🇷 Versão em Português](README.pt-br.md) | 🇺🇸 English Version
 
 A vibrant, fluid, and full-featured **3D Endless Runner** web game built with **Pure Vanilla JavaScript (ES Modules)**, **Three.js**, **Vite**, and **Iconify** (100% modular and framework-agnostic, with zero dependencies on React, Vue, or other component frameworks).
 
@@ -87,9 +87,14 @@ The game features a unified input management system supporting multiple input de
 |---|---|---|---|---|
 | **Move Left** | `Left Arrow` | `A` | `D-Pad Left` or `Left Stick (←)` | `D-Pad Left` or `Left Stick (←)` |
 | **Move Right** | `Right Arrow` | `D` | `D-Pad Right` or `Left Stick (→)` | `D-Pad Right` or `Left Stick (→)` |
-| **Jump Obstacle** | `Spacebar` | `Up Arrow` / `W` | `A Button` | `✕ (Cross) Button` |
+| **Jump / Glide** | `Spacebar` (hold in mid-air to glide) | `Up Arrow` / `W` | `A Button` | `✕ (Cross) Button` |
 | **Pause / Resume** | `Esc` | `P` | `Menu / Start` | `Options / Start` |
 | **Fullscreen** | `F` | — | — | — |
+
+- **Hang Glider Wings (*Paraglider*)**:
+  - Tapping the jump button triggers a standard acrobatic jump.
+  - **Holding down** the jump action (on keyboard, physical controller, touch jump button `#touch-jump`, or pulling the virtual analog upward) deploys **3D hang-glider wings**, sustaining the character in the air with a gentle, slow gliding descent.
+  - The moment the character's feet touch the ground (or if the jump button is released), the glider wings instantly vanish and normal running resumes seamlessly.
 
 ### 2. Touch Controls (Mobile / Tablets)
 - **Two Selectable Modes**:

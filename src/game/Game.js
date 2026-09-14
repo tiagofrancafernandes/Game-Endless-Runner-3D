@@ -30,6 +30,10 @@ export class Game {
     this.life = 100;
     this.strength = 60;
 
+    // Jump hold state for mobile/touch/joystick
+    this.touchJumpHeld = false;
+    this.joystickJumpHeld = false;
+
     // State: 'RUNNING' | 'PAUSED'
     this.isPaused = false;
     this.lastTime = performance.now();
@@ -61,6 +65,14 @@ export class Game {
     if (!this.isPaused) {
       this.lastTime = performance.now();
     }
+  }
+
+  setTouchJumpHeld(held) {
+    this.touchJumpHeld = held;
+  }
+
+  setJoystickJumpHeld(held) {
+    this.joystickJumpHeld = held;
   }
 
   resetScore() {
@@ -114,8 +126,11 @@ export class Game {
     // Speed progression: slight increase over time, capped safely
     this.gameSpeed = Math.min(26, this.baseSpeed + (this.distance * 0.003));
 
-    // Update Player
-    this.player.update(delta, this.gameSpeed, this.particleSystem);
+    // Evaluate if jump is currently held across any input method
+    const isJumpHeld = inputManager.isPressed(ACTION_JUMP) || this.touchJumpHeld || this.joystickJumpHeld;
+
+    // Update Player (with glider jump-hold detection)
+    this.player.update(delta, this.gameSpeed, this.particleSystem, isJumpHeld);
 
     // Update Obstacles & Fruits
     this.obstacleManager.update(delta, this.gameSpeed, this.player.group.position.z);

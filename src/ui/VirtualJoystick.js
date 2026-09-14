@@ -9,6 +9,7 @@ export class VirtualJoystick {
     this.onMoveLeft = callbacks.onMoveLeft || (() => {});
     this.onMoveRight = callbacks.onMoveRight || (() => {});
     this.onJump = callbacks.onJump || (() => {});
+    this.onJumpHold = callbacks.onJumpHold || (() => {});
 
     this.base = this.container.querySelector('#touch-joystick-base');
     this.knob = this.container.querySelector('#touch-joystick-knob');
@@ -146,14 +147,18 @@ export class VirtualJoystick {
       this.nextRepeatTime = 0;
     }
 
-    // Vertical jump trigger (push stick upward)
+    // Vertical jump trigger & glide hold (push stick upward)
     if (ny < this.jumpThreshold) {
       if (!this.jumpTriggered) {
         this.jumpTriggered = true;
         this.onJump();
       }
+      this.onJumpHold(true);
     } else if (ny > -0.25) {
-      this.jumpTriggered = false;
+      if (this.jumpTriggered) {
+        this.jumpTriggered = false;
+        this.onJumpHold(false);
+      }
     }
   }
 
@@ -164,6 +169,9 @@ export class VirtualJoystick {
     }
     this.lastDirection = 0;
     this.nextRepeatTime = 0;
-    this.jumpTriggered = false;
+    if (this.jumpTriggered) {
+      this.jumpTriggered = false;
+      this.onJumpHold(false);
+    }
   }
 }

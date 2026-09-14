@@ -62,6 +62,9 @@ export class UIManager {
           if (this.game && !this.game.isPaused) {
             if (this.game.player.jump()) audioManager.playJump();
           }
+        },
+        onJumpHold: (isHeld) => {
+          if (this.game) this.game.setJoystickJumpHeld(isHeld);
         }
       });
     }
@@ -308,10 +311,17 @@ export class UIManager {
     if (touchJump) {
       touchJump.addEventListener('pointerdown', (e) => {
         e.preventDefault();
+        if (this.game) this.game.setTouchJumpHeld(true);
         if (this.game && !this.game.isPaused) {
           if (this.game.player.jump()) audioManager.playJump();
         }
       });
+      const endTouchJump = () => {
+        if (this.game) this.game.setTouchJumpHeld(false);
+      };
+      touchJump.addEventListener('pointerup', endTouchJump);
+      touchJump.addEventListener('pointercancel', endTouchJump);
+      touchJump.addEventListener('pointerleave', endTouchJump);
     }
 
     // Gamepad connection events

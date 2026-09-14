@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { audioManager } from '../audio/AudioManager.js';
 
 export class Player {
   constructor(scene) {
@@ -15,6 +16,11 @@ export class Player {
     this.isGrounded = true;
     this.jumpForce = 13.5;
     this.gravity = -34;
+
+    // Glider / Paraglider state
+    this.isGliding = false;
+    this.airTime = 0;
+    this.glideTime = 0;
 
     // Invulnerability & Hit state
     this.isInvulnerable = false;
@@ -166,6 +172,119 @@ export class Player {
     rightHand.position.y = -0.48;
     this.rightArmPivot.add(rightArm, rightHand);
     this.model.add(this.rightArmPivot);
+
+    // Build hang-glider wings
+    this.buildGliderMesh();
+  }
+
+  buildGliderMesh() {
+    this.gliderGroup = new THREE.Group();
+    this.gliderGroup.position.set(0, 2.05, -0.15); // positioned above character's head/arms
+    this.gliderGroup.visible = false;
+
+    // Materials
+    const wingMat = new THREE.MeshStandardMaterial({
+      color: 0x0ea5e9, // vibrant sky cyan
+      roughness: 0.35,
+      metalness: 0.1,
+      side: THREE.DoubleSide
+    });
+    const stripeMat = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b, // amber gold racing stripe
+      roughness: 0.3,
+      metalness: 0.1,
+      side: THREE.DoubleSide
+    });
+    const frameMat = new THREE.MeshStandardMaterial({
+      color: 0x475569, // dark slate titanium frame
+      roughness: 0.25,
+      metalness: 0.85
+    });
+
+    this.characterMaterials.push(wingMat, stripeMat, frameMat);
+
+    // 1. Delta Wing Canopy (Two triangular swept wings)
+    // Left Wing
+    const leftWingGeo = new THREE.BufferGeometry();
+    const leftVertices = new Float32Array([
+      0, 0.05, -0.85,     // Nose apex (forward -Z)
+      -2.1, -0.05, 0.55,  // Left wingtip
+      0, 0.08, 0.45       // Center trailing edge (+Z)
+    ]);
+    leftWingGeo.setAttribute('position', new THREE.BufferAttribute(leftVertices, 3));
+    leftWingGeo.computeVertexNormals();
+    const leftWing = new THREE.Mesh(leftWingGeo, wingMat);
+    leftWing.castShadow = true;
+    this.gliderGroup.add(leftWing);
+
+    // Right Wing
+    const rightWingGeo = new THREE.BufferGeometry();
+    const rightVertices = new Float32Array([
+      0, 0.05, -0.85,     // Nose apex (forward -Z)
+      0, 0.08, 0.45,      // Center trailing edge (+Z)
+      2.1, -0.05, 0.55    // Right wingtip
+    ]);
+    rightWingGeo.setAttribute('position', new THREE.BufferAttribute(rightVertices, 3));
+    rightWingGeo.computeVertexNormals();
+    const rightWing = new THREE.Mesh(rightWingGeo, wingMat);
+    rightWing.castShadow = true;
+    this.gliderGroup.add(rightWing);
+
+    // Center decorative spine stripe
+    const stripeGeo = new THREE.BufferGeometry();
+    const stripeVertices = new Float32Array([
+      0, 0.06, -0.85,
+      -0.35, 0.07, 0.45,
+      0.35, 0.07, 0.45
+    ]);
+    stripeGeo.setAttribute('position', new THREE.BufferAttribute(stripeVertices, 3));
+    stripeGeo.computeVertexNormals();
+    const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+    this.gliderGroup.add(stripe);
+
+    // 2. Tubular Frame (Central keel + Leading edges)
+    const keelGeo = new THREE.CylinderGeometry(0.028, 0.028, 1.4, 8);
+    const keel = new THREE.Mesh(keelGeo, frameMat);
+    keel.rotation.x = Math.PI / 2;
+    keel.position.set(0, 0.06, -0.15);
+    this.gliderGroup.add(keel);
+
+    const leftEdgeGeo = new THREE.CylinderGeometry(0.024, 0.024, 2.5, 8);
+    const leftEdge = new THREE.Mesh(leftEdgeGeo, frameMat);
+    leftEdge.position.set(-1.05, 0, -0.15);
+    leftEdge.rotation.z = Math.atan2(0.1, 2.1);
+    leftEdge.rotation.y = -Math.atan2(1.4, 2.1);
+    this.gliderGroup.add(leftEdge);
+
+    const rightEdgeGeo = new THREE.CylinderGeometry(0.024, 0.024, 2.5, 8);
+    const rightEdge = new THREE.Mesh(rightEdgeGeo, frameMat);
+    rightEdge.position.set(1.05, 0, -0.15);
+    rightEdge.rotation.z = -Math.atan2(0.1, 2.1);
+    rightEdge.rotation.y = Math.atan2(1.4, 2.1);
+    this.gliderGroup.add(rightEdge);
+
+    // 3. A-Frame Control Bar (Hanging down to hand level)
+    const aFrameGroup = new THREE.Group();
+    const strutGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.72, 8);
+    const leftStrut = new THREE.Mesh(strutGeo, frameMat);
+    leftStrut.position.set(-0.32, -0.34, -0.05);
+    leftStrut.rotation.z = -0.22;
+    aFrameGroup.add(leftStrut);
+
+    const rightStrut = new THREE.Mesh(strutGeo, frameMat);
+    rightStrut.position.set(0.32, -0.34, -0.05);
+    rightStrut.rotation.z = 0.22;
+    aFrameGroup.add(rightStrut);
+
+    const barGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.84, 8);
+    const handleBar = new THREE.Mesh(barGeo, frameMat);
+    handleBar.rotation.z = Math.PI / 2;
+    handleBar.position.set(0, -0.66, -0.05);
+    aFrameGroup.add(handleBar);
+
+    this.gliderGroup.add(aFrameGroup);
+
+    this.model.add(this.gliderGroup);
   }
 
   moveLeft() {
@@ -190,6 +309,10 @@ export class Player {
     if (this.isGrounded) {
       this.vy = this.jumpForce;
       this.isGrounded = false;
+      this.isGliding = false;
+      this.airTime = 0;
+      this.glideTime = 0;
+      if (this.gliderGroup) this.gliderGroup.visible = false;
       return true;
     }
     return false;
@@ -204,12 +327,16 @@ export class Player {
     this.invulnerableTimer = this.invulnerableDuration;
     this.stumbleTimer = 0.5;
 
+    // Cancel gliding immediately on impact
+    this.isGliding = false;
+    if (this.gliderGroup) this.gliderGroup.visible = false;
+
     // "volta para o meio onde continua a correr" (user requirement)
     this.currentLane = 0;
     this.targetX = 0;
   }
 
-  update(delta, gameSpeed, particleSystem) {
+  update(delta, gameSpeed, particleSystem, isJumpHeld = false) {
     // Smooth lane transition (lerp)
     this.group.position.x += (this.targetX - this.group.position.x) * Math.min(1, delta * 14);
 
@@ -217,16 +344,57 @@ export class Player {
     const lateralSpeed = (this.targetX - this.group.position.x);
     this.model.rotation.z = -lateralSpeed * 0.15;
 
-    // Vertical physics (jump & gravity)
+    // Vertical physics (jump, gliding & gravity)
     if (!this.isGrounded) {
-      this.vy += this.gravity * delta;
+      this.airTime += delta;
+
+      // Deploy glider if jump action is held while airborne
+      if (isJumpHeld && this.airTime > 0.18) {
+        if (!this.isGliding) {
+          this.isGliding = true;
+          if (this.gliderGroup) this.gliderGroup.visible = true;
+          audioManager.playGliderOpen();
+        }
+      } else if (!isJumpHeld && this.isGliding) {
+        // Player released jump in mid-air -> retract glider
+        this.isGliding = false;
+        if (this.gliderGroup) this.gliderGroup.visible = false;
+      }
+
+      if (this.isGliding) {
+        this.glideTime += delta;
+        // Substantially reduced gravity and capped downward speed for slow glide
+        const glideGravity = -7.5;
+        this.vy += glideGravity * delta;
+        this.vy = Math.max(this.vy, -2.8); // Terminal descent speed
+
+        // Aerodynamic flight oscillation
+        if (this.gliderGroup) {
+          this.gliderGroup.rotation.z = Math.sin(this.glideTime * 4.5) * 0.06;
+          this.gliderGroup.rotation.x = -0.12 + Math.sin(this.glideTime * 3) * 0.04;
+        }
+      } else {
+        // Normal fall gravity
+        this.vy += this.gravity * delta;
+      }
+
       this.y += this.vy * delta;
 
+      // Ground touchdown check
       if (this.y <= 0) {
         this.y = 0;
         this.vy = 0;
         this.isGrounded = true;
-        // Landing dust
+        this.airTime = 0;
+        this.glideTime = 0;
+
+        // "sumindo as asas do planador assim que toca o chão"
+        if (this.isGliding) {
+          this.isGliding = false;
+          if (this.gliderGroup) this.gliderGroup.visible = false;
+        }
+
+        // Landing dust puffs
         if (particleSystem) {
           particleSystem.createRunningDust(this.group.position);
           particleSystem.createRunningDust(this.group.position);
@@ -240,11 +408,14 @@ export class Player {
     if (this.stumbleTimer > 0) {
       this.stumbleTimer -= delta;
       this.model.rotation.x = 0.35 * (this.stumbleTimer / 0.5); // tilts backward towards camera
+    } else if (this.isGliding) {
+      // Streamlined forward aerodynamic tilt when flying
+      this.model.rotation.x = -0.32;
     } else {
       this.model.rotation.x = -0.08; // slight forward lean into the run (-Z)
     }
 
-    // Running animation
+    // Running / In-air animation
     if (this.isGrounded) {
       this.runCycle += delta * this.runSpeed * (gameSpeed / 12);
       const swing = Math.sin(this.runCycle);
@@ -263,8 +434,14 @@ export class Player {
       if (particleSystem && Math.abs(swing) > 0.85) {
         particleSystem.createRunningDust(this.group.position);
       }
+    } else if (this.isGliding) {
+      // Gliding flight pose: hands reaching up to the control bar, legs streaming back
+      this.leftArmPivot.rotation.x = -2.3;
+      this.rightArmPivot.rotation.x = -2.3;
+      this.leftLegPivot.rotation.x = 0.55;
+      this.rightLegPivot.rotation.x = 0.65;
     } else {
-      // In-air pose (legs tucked slightly back, arms spread for balance)
+      // Normal in-air jump pose (legs tucked slightly back, arms spread for balance)
       this.leftLegPivot.rotation.x = 0.3;
       this.rightLegPivot.rotation.x = 0.4;
       this.leftArmPivot.rotation.x = -0.6;
@@ -301,6 +478,10 @@ export class Player {
     this.y = 0;
     this.vy = 0;
     this.isGrounded = true;
+    this.isGliding = false;
+    this.airTime = 0;
+    this.glideTime = 0;
+    if (this.gliderGroup) this.gliderGroup.visible = false;
     this.isInvulnerable = false;
     this.invulnerableTimer = 0;
     this.model.visible = true;
