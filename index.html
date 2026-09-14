@@ -5,8 +5,199 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Endless Runner 3D - Three.js & Joystick</title>
   <link rel="stylesheet" href="./src/style.css" />
+  <style id="preloader-inline-style">
+    #app-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: linear-gradient(160deg, #090f1d 0%, #0f172a 45%, #162544 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #app-preloader.loaded {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .cartoon-loader-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.25rem;
+      max-width: 360px;
+      padding: 2rem;
+    }
+    .cartoon-runner-wrap {
+      position: relative;
+      width: 80px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .cartoon-runner-svg {
+      width: 64px;
+      height: 64px;
+      animation: cartoonHop 0.55s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    }
+    .cartoon-shadow {
+      width: 48px;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 50%;
+      animation: cartoonShadow 0.55s ease-in-out infinite alternate;
+      margin-top: 4px;
+    }
+    @keyframes cartoonHop {
+      0% {
+        transform: translateY(0) scale(1, 0.92);
+      }
+      100% {
+        transform: translateY(-24px) scale(0.96, 1.05);
+      }
+    }
+    @keyframes cartoonShadow {
+      0% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: scale(0.6);
+        opacity: 0.2;
+      }
+    }
+    .cartoon-title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+    .cartoon-title .brand-top {
+      font-size: 1.85rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: #38bdf8;
+      text-shadow: 0 3px 0 #0369a1, 0 6px 12px rgba(0, 0, 0, 0.6);
+      line-height: 1;
+    }
+    .cartoon-title .brand-bottom {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      color: #fbbf24;
+      text-shadow: 0 2px 0 #b45309, 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    .cartoon-progress-track {
+      width: 220px;
+      height: 14px;
+      background: #0f172a;
+      border: 2px solid #38bdf8;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+    .cartoon-progress-fill {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        #0284c7,
+        #0284c7 12px,
+        #38bdf8 12px,
+        #38bdf8 24px
+      );
+      background-size: 34px 34px;
+      animation: cartoonStripes 0.75s linear infinite;
+      border-radius: 999px;
+    }
+    @keyframes cartoonStripes {
+      from { background-position: 0 0; }
+      to { background-position: 34px 0; }
+    }
+    .cartoon-loading-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .cartoon-dots::after {
+      content: '';
+      animation: cartoonDots 1.5s steps(4, end) infinite;
+    }
+    @keyframes cartoonDots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80%, 100% { content: '...'; }
+    }
+  </style>
 </head>
 <body>
+  <!-- Cartoon Preloader / App Cloak (prevents Flash of Unstyled Content) -->
+  <div id="app-preloader" aria-label="Carregando o jogo...">
+    <div class="cartoon-loader-box">
+      <div class="cartoon-runner-wrap">
+        <svg class="cartoon-runner-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Red Cap -->
+          <ellipse cx="32" cy="14" rx="14" ry="7" fill="#ef4444" />
+          <path d="M38 15 C44 15 48 16 49 18 C47 20 42 20 37 19 Z" fill="#dc2626" />
+          <!-- Head/Face -->
+          <circle cx="32" cy="22" r="10" fill="#fcd34d" />
+          <!-- Eyes -->
+          <ellipse cx="35" cy="20" rx="1.8" ry="2.5" fill="#0f172a" />
+          <circle cx="36" cy="19" r="0.8" fill="#ffffff" />
+          <!-- Friendly Smile -->
+          <path d="M32 25 Q35 28 38 25" stroke="#92400e" stroke-width="1.6" stroke-linecap="round" fill="none" />
+          <!-- Torso / Blue Shirt -->
+          <rect x="24" y="31" width="16" height="15" rx="4" fill="#2563eb" />
+          <!-- Orange Backpack -->
+          <rect x="18" y="32" width="6" height="12" rx="3" fill="#ea580c" />
+          <!-- Arms in running motion -->
+          <path d="M26 34 L21 41 L17 40" stroke="#fcd34d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M38 34 L43 40 L47 38" stroke="#fcd34d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <!-- Legs in running stride -->
+          <path d="M28 46 L24 54 L19 56" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M36 46 L40 53 L45 54" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+          <!-- White Sneakers with Red Soles -->
+          <ellipse cx="18" cy="56" rx="4" ry="2.2" fill="#ffffff" />
+          <path d="M15 58 L22 58" stroke="#ef4444" stroke-width="1.2" stroke-linecap="round" />
+          <ellipse cx="46" cy="54" rx="4" ry="2.2" fill="#ffffff" />
+          <path d="M43 56 L50 56" stroke="#ef4444" stroke-width="1.2" stroke-linecap="round" />
+        </svg>
+        <div class="cartoon-shadow"></div>
+      </div>
+
+      <div class="cartoon-title">
+        <div class="brand-top">ENDLESS</div>
+        <div class="brand-bottom">RUNNER 3D</div>
+      </div>
+
+      <div class="cartoon-progress-track">
+        <div class="cartoon-progress-fill"></div>
+      </div>
+
+      <div class="cartoon-loading-text">
+        <span>Carregando</span><span class="cartoon-dots"></span>
+      </div>
+    </div>
+  </div>
   <!-- 3D WebGL Canvas -->
   <div id="canvas-container">
     <canvas id="game-canvas"></canvas>
@@ -321,5 +512,40 @@
 
   <!-- Entry Script -->
   <script type="module" src="./src/main.js"></script>
+
+  <!-- Preloader Dismissal Script (inline) -->
+  <script>
+    (function() {
+      var isDismissed = false;
+      function dismissPreloader() {
+        if (isDismissed) return;
+        isDismissed = true;
+        var preloader = document.getElementById('app-preloader');
+        if (preloader) {
+          preloader.classList.add('loaded');
+          setTimeout(function() {
+            if (preloader.parentNode) {
+              preloader.parentNode.removeChild(preloader);
+            }
+          }, 600);
+        }
+      }
+
+      // Expose globally so main.js or scene initialization can dismiss directly
+      window.dismissAppPreloader = dismissPreloader;
+
+      // Automatically dismiss once DOM and assets finish loading
+      if (document.readyState === 'complete') {
+        setTimeout(dismissPreloader, 350);
+      } else {
+        window.addEventListener('load', function() {
+          setTimeout(dismissPreloader, 350);
+        });
+      }
+
+      // Safety fallback: maximum 2.5s display time
+      setTimeout(dismissPreloader, 2500);
+    })();
+  </script>
 </body>
 </html>
