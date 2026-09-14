@@ -235,7 +235,8 @@ body, html {
 .touch-controls {
   display: flex;
   justify-content: space-between;
-  padding: 1.5rem;
+  align-items: flex-end;
+  padding: 1.5rem 1.75rem calc(3.5rem + env(safe-area-inset-bottom, 0px)) 1.75rem;
   width: 100%;
 }
 
@@ -534,6 +535,11 @@ body, html {
     height: 2.6rem;
     font-size: 1.25rem;
   }
+
+  /* Eleva os controles na tela de tablet */
+  .touch-controls {
+    padding: 1.25rem 1.5rem calc(4rem + env(safe-area-inset-bottom, 0px)) 1.5rem;
+  }
 }
 
 /* Extra tweaks for small mobile screens (<= 640px) */
@@ -571,5 +577,10 @@ body, html {
     min-width: 90px;
     font-size: 0.75rem;
     padding: 0.35rem 0.5rem;
+  }
+
+  /* Eleva os botões direcionais e de pulo em telas de smartphone */
+  .touch-controls {
+    padding: 1rem 1.25rem calc(5.25rem + env(safe-area-inset-bottom, 0px)) 1.25rem;
   }
 }
